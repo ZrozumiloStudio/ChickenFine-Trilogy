@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #2e2e2e;
+            background-image: url(listmenu.png);
+            background-repeat: no-repeat;
+			background-position: center center;
+			background-attachment: fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+			margin-left: 0px;
+			margin-top: 0px;
+        }
+
+        .menu-button {
+            padding: 3px 30px;
+            font-size: 18px;
+            background-color: #baffbf;
+            color: #053800;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 2px;
+			font-size: 20px;
+        }
+		
+		.serverstatustext {
+            padding: 3px 30px;
+            font-size: 18px;
+            color: #baffbf;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 2px;
+			font-size: 20px;
+			margin-left: -5px;
+        }
+
+        .menu-button:hover {
+            background-color: #45a049;
+        }
+
+        .menu-button:active {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+		<h1 class="serverstatustext">IN DEVELOPMENT</h1>
+        <button class="menu-button" onclick="redirect()">ZrozDev Server #1</button>
+        <button class="menu-button" onclick="redirect()">ZrozDev Server #2</button>
+        <button class="menu-button" onclick="redirect()">ZrozDev Server #3</button>
+        <button class="menu-button" onclick="redirect()">ZrozDev Server #4</button>
+    </div>
+
+    <script>
+        function redirect() {
+            window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+	
+html {
+  filter: grayscale(30%) sepia(10%) brightness(1);
+}
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+			filter: sepia(100%);
+        }
+		
+		body {
+			background-color:#abffab;
+		}
+		
+       .button {
+           top:50%;
+           background-color:#0a0a23;
+           color: #fff;
+	       border:none;
+	       border-radius:5px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+
+.button:hover {
+      background-color:purple;
+      transition: 0.7s;
+  }
+
+.button:active {
+    background-color: #ffbf00;
+	transition: 0.1s;
+}
+
+       .button2 {
+           top:50%;
+           background-color:#451936;
+           color: #fff;
+	       border:none;
+	       border-radius:1px;
+	       min-height:15px; 
+           min-width: 120px;
+        }
+
+.button2:hover {
+      background-color:#7a1c31;
+      transition: 0.7s;
+  }
+
+.button2:active {
+    background-color: #ffbf00;
+	transition: 0.1s;
+}
+
+       .button5 {
+           top:50%;
+           background-color:#505b6e;
+           color: #fff;
+	       border:none;
+	       border-radius:1px;
+	       min-height:25px; 
+           min-width: 120px;
+        }
+
+.button5:hover {
+      background-color:#7a1c31;
+      transition: 0.7s;
+  }
+
+.button5:active {
+    background-color: #ffbf00;
+	transition: 0.1s;
+}
+
+       .button3 {
+           top:50%;
+           background-color:#000000;
+           color: #fff;
+	       border:none;
+	       border-radius:10px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+		
+       .button4 {
+           top:50%;
+           background-color:green;
+           color: #fff;
+	       border:none;
+	       border-radius:3px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+		
+.button4:hover {
+      background-color:#451936;
+      transition: 0.7s;
+  }
+
+.button3:hover {
+      background-color:#212121;
+      transition: 0.7s;
+	  box-shadow: 0px 0px 2px 2px rgb(0,0,0);
+	  background: #ffffff url(https://kartinki.pics/uploads/posts/2021-07/1625829374_14-kartinkin-com-p-oboi-so-znakom-radiatsii-krasivie-15.jpg) center center/cover no-repeat;
+	  color: #00000;
+	  transition-delay: 0.1s;
+      transition: 1s;
+	  filter: invert(100%);
+      letter-spacing: 5px;
+      outline: 10px dashed #ff9500;
+      cursor: pointer;
+	  monospace
+	  font-weight: 1000
+  }
+
+.button3:active {
+    background-color: #ffffff;
+	transition: 0.3s;
+	filter: invert(0%);
+	letter-spacing: 0px;
+}
+
+        #photo {
+            position: absolute;
+            top: -20px;
+            left: 520px;
+            transition: transform 0.2s ease;
+        }
+
+    </style>
+    <title>Zrozumilo Engine</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="1500" height="600" style="overflow: hidden; filter: grayscale(50%);"></canvas>
+	<button class="button4" id="shakeButton" onclick="shoot()">Shoot</button>
+	<button class = "button4" onclick="zroz(this)">click to XP</button>
+	<button class = "button4" onclick="suicide()">SUICIDE</button>
+	<button class="button3" onclick="Armor()">R.P.A(1000 XP)</button>
+	<button class="button3" onclick="MMedkit()">Mini Medkit(25 XP)</button>
+	<button class="button3" onclick="Medkit()">Normal Medkit(50 XP)</button>
+	<button class="button3" onclick="BMedkit()">Big Medkit(100 XP)</button>
+	<button class="button3" onclick="freezerhere()">Old Strange Ticket(100 XP)</button>
+	<br>
+	<button class="button2" onclick="LSD()">LSD(150 XP)</button>
+	<button class="button2" onclick="snus()">Snus(150 XP)</button>
+	<button class="button2" onclick="Nuke()">Snus 961(5000 XP)</button>
+	<button class="button2" onclick="FPVD()">FPV Drone(1000 XP)</button>
+	<button class="button2" onclick="Drobash()">BIMBA(300 XP)</button>
+	<br>
+	<button class="button5" onclick="dump()">Go to dump(100 XP)</button>
+	<button class="button5" onclick="freezerhere()">Go to ???(100 XP)</button>
+    <img id="photo" src="weapon/gun3.png" width="1500" height="600" style="position: absolute; top: 20px; left: 20px; filter: sepia(100%) drop-shadow(0px 0px 10px black) blur(1px);">
+	<img id="spriteImage" src="Engine/NextBOTS/sprite.png" style="display: none;">
+	<img id="bggg" src="weapon/symno.gif" width="1500" height="600" style="position: absolute; top: 20px; left: 20px; opacity: 0.3;">
+    <img id="rpa" src="weapon/No.png" width="1500" height="600" style="position: absolute; top: 20px; left: 20px;">
+
+
+    <script>
+        // Отримання елементу canvas та його контексту
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ініціалізація об'єкта гравця
+        const player = {
+            x: 50,
+            y: 50,
+            direction: Math.PI / 4, // Початковий напрямок (45 градусів)
+            speed: 1,
+            rotationSpeed: Math.PI / 120, // Швидкість обертання
+			hp:100,
+        };
+		
+const sprites = [
+    { src: 'Engine/NextBOTS/sprite.png', x: 100, y: 100 },
+    // Додайте інші спрайти тут
+];
+
+function drawSprites() {
+    for (const sprite of sprites) {
+        ctx.drawImage(document.getElementById('spriteImage'), sprite.x, sprite.y);
+    }
+}
+
+let spriteWidth = 0.0000001; // Початкова ширина спрайта
+let spriteHeight = 0.0000001; // Початкова висота спрайта
+const scaleStep = 0.1; // Крок зміни масштабу
+
+	//NPC-V2
+	//
+	
+	function turrell() {
+	 var audio = new Audio('Engine/Assets/turrel.mp3');
+     audio.play();
+	}
+	
+	function freezerhere() {
+		if (xp > 100) {
+		 window.location.href = 'Engine/freezerprime/fc.html';
+		};
+	}
+	
+	function dump() {
+		if (xp > 100) {
+		 window.location.href = 'Engine/maps/dump/dump.html';
+		};
+	}
+	
+function redirectIfMatch() {
+    // Отримання
+    var userInput = document.getElementById('textInput').value;
+    
+    // Перевірка
+    if (userInput.toLowerCase() === 'opendevzrozz') {
+        // перенаправлення
+        window.location.href = 'Engine/maps/revolver/revolver.html';
+    } else {
+        alert('NO');
+    }
+}
+
+class CF2_Vehicles {
+  constructor(speed, agility, vehicleid) {
+    this.speed = speed;
+	this.agility = agility;
+	this.vehicleid = vehicleid;
+  }
+}
+
+var buggy = new CF2_Vehicles('50', 'good', 'buggy');
+console.log(buggy);
+
+        var photo = document.getElementById("photo");
+        var shakeButton = document.getElementById("shakeButton");
+        var shakeIntensity = 300; // Початкова інтенсивнітсь
+        var maxShakeIntensity = 900; // Максимальна інтенсивність тряски
+        var shakeDuration = 200; // Час тряски у мілісекундах
+        var lastShakeTime = Date.now(); // час тряски останнньюоі ностан... остан... ПАСЛЕДНЯЙ
+
+        function shakeImage() {
+            var currentTime = Date.now();
+            if (currentTime - lastShakeTime > shakeDuration) {
+                lastShakeTime = currentTime;
+                var randomX = Math.random() * shakeIntensity * 2 - shakeIntensity;
+                var randomY = Math.random() * shakeIntensity * 2 - shakeIntensity;
+                photo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                // Збільшуєм інтенсивність тряски за декілька кліків
+                if (shakeIntensity < maxShakeIntensity) {
+                    shakeIntensity += 5;
+                }
+            }
+        }
+
+        // Функция для остановки тряски
+        function stopShake() {
+            photo.style.transform = "translate(0px, 0px)";
+            shakeIntensity = 10; // Сбрасываем интенсивность тряски после остановки
+        }
+		
+        function playSound() {
+            var audio = new Audio('Engine/Assets/shooot.mp3');
+            audio.play();
+        }
+		
+		function NukeSound() {
+            var audio = new Audio('weapon/nukes.mp3');
+            audio.play();
+        }
+	
+	var musicaaa = 0;
+	
+function rains() {
+    var audio = new Audio('Engine/Assets/rain.mp3');
+    audio.addEventListener('ended', function() {
+        this.currentTime = 1;
+        this.play();
+    }, false);
+    audio.play();
+	if(musicaaa => 1) return false;
+}
+
+function sdoxxsound() {
+    var audio = new Audio('Engine/Assets/SDOX.mp3');
+    audio.addEventListener('ended', function() {
+        this.currentTime = 1;
+        this.play();
+    }, false);
+    audio.play();
+	musicaaa = 1;
+}
+
+function musicsnus() {
+    var audio = new Audio('Engine/Assets/ATHEYM.mp3');
+    audio.addEventListener('ended', function() {
+        this.currentTime = 1;
+        this.play();
+    }, false);
+    audio.play();
+}
+
+        function idtizvuk() {
+            var audio = new Audio('Engine/Assets/idti.wav');
+            audio.play();
+        }
+
+window.addEventListener('load', function() {
+    setTimeout(rains, 1000);
+});
+
+
+        shakeButton.addEventListener("click", shakeImage);
+        shakeButton.addEventListener("mouseup", stopShake);
+
+        // Ініціалізація карти гри
+        var map = [
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+[1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1],
+[1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1],
+[1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+[1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1],
+[1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1],
+[1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1],
+[1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+[1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+[1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+[1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+[1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+[1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+
+        // Довжина променя від гравця для raycasting
+        var rayLength = 230;
+
+        // Додавання слухачів подій для обробки натискань клавіш
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+
+        // Об'єкт для відстеження стану натискань клавіш
+        const keys = {
+            forward: false,
+            backward: false,
+            left: false,
+            right: false,
+        };
+
+        // Обробник натискань клавіш
+        function handleKeyDown(event) {
+            if (event.key === 'w') keys.forward = true;
+            if (event.key === 's') keys.backward = true;
+            if (event.key === 'a') keys.left = true;
+            if (event.key === 'd') keys.right = true;
+        }
+
+        function handleKeyUp(event) {
+            if (event.key === 'w') keys.forward = false;
+            if (event.key === 's') keys.backward = false;
+            if (event.key === 'a') keys.left = false;
+            if (event.key === 'd') keys.right = false;
+        }
+
+        // Функція для оновлення стану гри
+        function update() {
+            // Обробка введення та оновлення стану гравця
+            if (keys.forward) {
+                player.x += player.speed * Math.cos(player.direction);
+                player.y += player.speed * Math.sin(player.direction);
+				spriteWidth *= (1 + scaleStep);
+                spriteHeight *= (1 + scaleStep);
+				idtizvuk();
+            }
+            if (keys.backward) {
+                player.x -= player.speed * Math.cos(player.direction);
+                player.y -= player.speed * Math.sin(player.direction);
+				idtizvuk();
+				//spriteWidth *= (1 - scaleStep);
+                //spriteHeight *= (1 - scaleStep);
+            }
+            if (keys.left) {
+                player.direction -= player.rotationSpeed;
+				spriteWidth *= (1 + scaleStep);
+                spriteHeight *= (1 + scaleStep);
+            }
+            if (keys.right) {
+                player.direction += player.rotationSpeed;
+				spriteWidth *= (1 + scaleStep);
+                spriteHeight *= (1 + scaleStep);
+            }
+
+            // Raycasting
+            for (let i = 0; i < canvas.width; i++) {
+                const angle = player.direction - Math.PI / 6 + (i / canvas.width) * (Math.PI / 3);
+                let rayX = player.x;
+                let rayY = player.y;
+                let rayDistance = 0;
+
+                while (rayDistance < rayLength) {
+                    rayX += Math.cos(angle);
+                    rayY += Math.sin(angle);
+
+                    if (map[Math.floor(rayY / 50)][Math.floor(rayX / 50)] === 1) {
+                        break;
+                    }
+
+                    rayDistance += 1;
+                }
+
+                var lineHeight = (canvas.height / rayDistance) * 70;
+                const brightness = 1 - Math.min(1, rayDistance / rayLength); // Простий розрахунок яскравості
+                var wallColor = `rgba(24, 44, 24, ${brightness})`; //колір стіни
+
+                ctx.fillStyle = wallColor;
+                ctx.fillRect(i, (canvas.height - lineHeight) / 2, 1, lineHeight);
+            }
+
+            // Малювання гравця
+            // ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, 5, 0, 2 * Math.PI);
+            // ctx.fill();
+        }
+		
+		
+		function theFogIsComing() {
+			rayLength-=1;
+		}
+		
+		function removefog() {
+            rayLength+=20;
+			console.log(rayLength)
+        }
+
+		
+		function addfog() {
+            rayLength-=25;
+			console.log(rayLength)
+        }
+		
+		var xp = 0;
+		
+		function xpadd() {
+            xp++;
+			console.log(`XP: ${xp}`);
+			console.log(`HP: ${player.hp}`);
+			console.log(`SNUS: ${snusik}`);
+		}
+		
+		setInterval(xpadd, 1000);
+		
+		if (xp == 30) {
+		  console.log("30 XP");
+		};
+		
+		
+        function changeImage() {
+            if (xp > 30) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/gun22.png";
+				xp++;
+            }
+        }
+		
+		function Skin() {
+            if (xp > 25) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/skin.png";
+			    xp-=25;
+            }
+        }
+		
+		function Skin2() {
+            if (xp > 25) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/skin2.png";
+			    xp-=25;
+            }
+        }
+		
+        function Armor() {
+            if (xp > 1000) {
+                var newarmor = document.getElementById("rpa");
+                newarmor.src = "weapon/RPA2.png";
+				xp-=1000;
+                player.speed = 2;
+				player.hp = 300;
+		        setInterval(theFogIsComing, 400);
+            }
+        }
+		
+        function FPVD() {
+            if (xp > 1000) {
+                var newarmor = document.getElementById("rpa");
+                newarmor.src = "weapon/FPV.png";
+				xp-=1000;
+		        player.x = 600;
+                player.speed = 5;
+				player.hp = 300;
+				const button = document.getElementById("shakeButton");
+                button.style.display = "none";
+				player.rotationSpeed = Math.PI / 400;
+				var newImage = document.getElementById("photo");
+                newImage.src = "weapon/no.png";
+            }
+        }
+		
+		function Nuke() {
+            if (xp > 5000) {
+				NukeSound();
+				NukeSound();
+				NukeSound();
+				NukeSound();
+                var newarmor = document.getElementById("rpa");
+                newarmor.src = "weapon/nuke.png";
+				xp-=5000;
+                player.speed = 3;
+				player.hp -= 30;
+            }
+        }
+		
+		function stonks() {
+			xp+=100
+		}
+		
+        function Drobash() {
+            if (xp > 300) {
+                var newgun = document.getElementById("photo");
+                newgun.src = "weapon/brobashryki.png";
+				xp-=300;
+				player.hp = 150;
+				setInterval(stonks, 10000);
+            }
+        }
+		
+        function BMedkit() {
+            if (xp > 100) {
+				xp-=100;
+				player.hp+=75;
+            }
+        }
+		
+        function Medkit() {
+            if (xp > 50) {
+				xp-=50;
+				player.hp+=50;
+            }
+        }
+		
+        function MMedkit() {
+            if (xp > 25) {
+				xp-=25;
+				player.hp+=25;
+            }
+        }
+		
+		function SnusiikSound() {
+            var audio = new Audio('Engine/Assets/signal.wav');
+            audio.play();
+        }
+		
+		var snusik = 0;
+		
+        function snus() {
+            if (xp > 150) {
+				xp-=150;
+				player.hp-=25;
+				player.speed+=5
+				var newarmor = document.getElementById("rpa");
+                newarmor.src = "weapon/snus.png";
+				snusik++;
+				SnusiikSound();
+				musicsnus();
+            }
+        }
+		
+		function LSD() {
+            if (xp > 150) {
+				xp-=150;
+				player.hp-=25;
+				player.speed+=7
+				player.rotationSpeed = Math.PI / 50;
+				var newarmor = document.getElementById("rpa");
+                newarmor.src = "weapon/lsd.png";
+				SnusiikSound();
+				SnusiikSound();
+				SnusiikSound();
+				SnusiikSound();
+				musicsnus();
+			    sdoxxsound();
+		        setInterval(playSound, 4000);
+				rayLength-=20;
+				document.body.style.backgroundColor = '#d492cd';
+            }
+        }
+		
+		function shoot() {
+            var newImages = document.getElementById("photo");
+            newImages.src = "weapon/shoothm.png";
+			
+			var newImages2 = document.getElementById("photo");
+			setInterval(function() {
+                newImages2.src = "weapon/gun3.png";
+            }, 500);
+            
+			playSound();
+            player.x -= player.speed * Math.cos(player.direction);
+            player.y -= player.speed * Math.sin(player.direction);
+            player.x -= player.speed * Math.cos(player.direction);
+            player.y -= player.speed * Math.sin(player.direction);
+			spriteWidth *= (1 + scaleStep);
+            spriteHeight *= (1 + scaleStep);
+			var DestroyChi = document.getElementById("spriteImage");
+            DestroyChi.src = "Engine/NextBOTS/spriteded.png";
+			removeWallInFront()
+
+            var newImage2 = document.getElementById("photo");
+            setInterval(function() {
+              newImage2.src = document.getElementById("photo").src;
+            }, 1000);
+         };
+		 
+document.addEventListener("keydown", function(event) {
+    if (event.key === "x" || event.key === "X") {
+        shoot();
+    }
+});
+		
+	    function death() {
+            if (player.hp <= 0) {
+                var deathsc = document.getElementById("rpa");
+                deathsc.src = "Engine/Assets/death/death.png";
+				xp=0;
+				sdoxxsound();
+            }
+        };
+		
+		function sdoxni() {
+			player.hp-=3;
+		};
+		
+		function suicide() {
+			player.hp=0;
+		};
+		
+		setInterval(death, 1000);
+		setInterval(sdoxni, 1000);
+		
+		function destroyingg() {
+            var audio = new Audio('Weapon/stenepizda.mp3');
+            audio.play();
+        }
+		
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'q') {
+        placeWallInFront();
+    }
+});
+
+function placeWallInFront() {
+    const distance = 100; 
+    
+    const nextX = Math.floor((player.x + Math.cos(player.direction) * distance) / 50);
+    const nextY = Math.floor((player.y + Math.sin(player.direction) * distance) / 50);
+
+    if (nextY >= 0 && nextY < map.length && nextX >= 0 && nextX < map[0].length) {
+        map[nextY][nextX] = 1; 
+    }
+}
+
+function removeWallInFront() {
+    const distance = 50;
+
+    const nextX = Math.floor((player.x + Math.cos(player.direction) * distance) / 50);
+    const nextY = Math.floor((player.y + Math.sin(player.direction) * distance) / 50);
+
+    if (nextY >= 0 && nextY < map.length && nextX >= 0 && nextX < map[0].length) {
+        map[nextY][nextX] = 0;
+		destroyingg();
+    }
+}
+		
+		function zroz(el) {
+           xp++;
+	       console.log(xp);
+	       el.innerHTML = xp
+	       el.innerHTML = `<alt="Button Image"><span>${count}</span>`;
+        };
+
+		
+		/*function imageee() {
+		var img = document.getElementById("photo");
+        context.drawImage(img, 10, 10);
+		}*/
+		
+        // Функція головного циклу гри
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            update();
+            requestAnimationFrame(gameLoop);
+			ctx.drawImage(document.getElementById('spriteImage'), 600, 250, spriteWidth, spriteHeight);
+        }
+
+        // Запуск головного циклу гри
+        gameLoop();
+    </script>
+</body>
+</html>

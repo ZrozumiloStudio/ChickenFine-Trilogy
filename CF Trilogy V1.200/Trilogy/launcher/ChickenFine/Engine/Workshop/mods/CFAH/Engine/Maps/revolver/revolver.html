@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+		
+body {
+    background-color: #adebf7;
+}
+		
+       .button {
+           top:50%;
+           background-color:#0a0a23;
+           color: #fff;
+	       border:none;
+	       border-radius:5px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+
+.button:hover {
+      background-color:purple;
+      transition: 0.7s;
+  }
+
+.button:active {
+    background-color: #ffbf00;
+	transition: 0.1s;
+}
+
+       .button2 {
+           top:50%;
+           background-color:#451936;
+           color: #fff;
+	       border:none;
+	       border-radius:3px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+
+.button2:hover {
+      background-color:#7a1c31;
+      transition: 0.7s;
+  }
+
+.button2:active {
+    background-color: #ffbf00;
+	transition: 0.1s;
+}
+
+       .button3 {
+           top:50%;
+           background-color:#000000;
+           color: #fff;
+	       border:none;
+	       border-radius:10px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+
+.button3:hover {
+      background-color:#212121;
+      transition: 0.7s;
+	  box-shadow: 0px 0px 2px 2px rgb(0,0,0);
+  }
+
+.button3:active {
+    background-color: #ffffff;
+	transition: 0.1s;
+    box-shadow: 0px 0px 5px 5px rgb(200,200,200);
+}
+
+        #photo {
+            position: absolute;
+            top: -20px;
+            left: 520px;
+        }
+
+    </style>
+    <title>Zrozumilo Engine</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="1500" height="600"></canvas>
+	<button class="button3" onclick="shoot()">Shoot</button>
+	<button class = "button3" onclick="zroz(this)">click to money</button>
+    <img id="photo" src="weapon/gun3.png" width="1000" height="1000" style="position: absolute; top: -380px; left: 520px;">
+
+    <script>
+        // Отримання елементу canvas та його контексту
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ініціалізація об'єкта гравця
+        const player = {
+            x: 50,
+            y: 50,
+            direction: Math.PI / 4, // Початковий напрямок (45 градусів)
+            speed: 2.5,
+            rotationSpeed: Math.PI / 100, // Швидкість обертання
+        };
+
+        // Ініціалізація карти гри
+        var map = [
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+[1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
+[1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1],
+[1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1],
+[1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1],
+[1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+[1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1],
+[1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+[1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1],
+[1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1],
+[1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1],
+[1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1],
+[1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1],
+[1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+[1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+		
+		var navmesh = [
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+[1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
+[1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1],
+[1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1],
+[1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1],
+[1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+[1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1],
+[1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+[1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1],
+[1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1],
+[1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1],
+[1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1],
+[1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1],
+[1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+[1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+
+        // Довжина променя від гравця для raycasting
+        var rayLength = 400;
+
+        // Додавання слухачів подій для обробки натискань клавіш
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+
+        // Об'єкт для відстеження стану натискань клавіш
+        const keys = {
+            forward: false,
+            backward: false,
+            left: false,
+            right: false,
+        };
+
+        // Обробник натискань клавіш
+        function handleKeyDown(event) {
+            if (event.key === 'w') keys.forward = true;
+            if (event.key === 's') keys.backward = true;
+            if (event.key === 'a') keys.left = true;
+            if (event.key === 'd') keys.right = true;
+        }
+
+        function handleKeyUp(event) {
+            if (event.key === 'w') keys.forward = false;
+            if (event.key === 's') keys.backward = false;
+            if (event.key === 'a') keys.left = false;
+            if (event.key === 'd') keys.right = false;
+        }
+
+        // Функція для оновлення стану гри
+        function update() {
+            // Обробка введення та оновлення стану гравця
+            if (keys.forward) {
+                player.x += player.speed * Math.cos(player.direction);
+                player.y += player.speed * Math.sin(player.direction);
+            }
+            if (keys.backward) {
+                player.x -= player.speed * Math.cos(player.direction);
+                player.y -= player.speed * Math.sin(player.direction);
+            }
+            if (keys.left) {
+                player.direction -= player.rotationSpeed;
+            }
+            if (keys.right) {
+                player.direction += player.rotationSpeed;
+            }
+
+            // Raycasting
+            for (let i = 0; i < canvas.width; i++) {
+                const angle = player.direction - Math.PI / 6 + (i / canvas.width) * (Math.PI / 3);
+                let rayX = player.x;
+                let rayY = player.y;
+                let rayDistance = 0;
+
+                while (rayDistance < rayLength) {
+                    rayX += Math.cos(angle);
+                    rayY += Math.sin(angle);
+
+                    if (map[Math.floor(rayY / 50)][Math.floor(rayX / 50)] === 1) {
+                        break;
+                    }
+
+                    rayDistance += 1;
+                }
+
+                var lineHeight = (canvas.height / rayDistance) * 70;
+                const brightness = 1 - Math.min(1, rayDistance / rayLength); // Простий розрахунок яскравості
+                const wallColor = `rgba(100, 100, 0, ${brightness})`; //колір стіни
+
+                ctx.fillStyle = wallColor;
+                ctx.fillRect(i, (canvas.height - lineHeight) / 2, 1, lineHeight);
+            }
+
+            // Малювання гравця
+            // ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, 5, 0, 2 * Math.PI);
+            // ctx.fill();
+        }
+		
+		
+		function removefog() {
+            rayLength+=20;
+			console.log(rayLength)
+        }
+
+		
+		function addfog() {
+            rayLength-=25;
+			console.log(rayLength)
+        }
+		
+		function mapaa() {
+            map[1, 2, 3]--;
+        }
+		
+		var coin = 0;
+		
+		function coinadd() {
+            coin++;
+			console.log(`money: ${coin}`);
+		}
+		
+		setInterval(coinadd, 1000);
+		
+		if (coin == 30) {
+		  console.log("30 COIN");
+		};
+		
+		
+        function changeImage() {
+            if (coin > 30) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/gun22.png";
+				coin++;
+            }
+        }
+		
+		function shoot() {
+            var newImages = document.getElementById("photo");
+            newImages.src = "weapon/shootgun1.png";
+			
+			var newImages2 = document.getElementById("photo");
+			setInterval(function() {
+                newImages2.src = "weapon/gun3.png";
+            }, 1000);
+
+            var newImage2 = document.getElementById("photo");
+            setInterval(function() {
+              newImage2.src = document.getElementById("photo").src;
+            }, 1000);
+         };
+		
+		function changeImage2() {
+            if (coin > 100) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/gun6.png";
+				coin+=3;
+            }
+        }
+		
+		function changeImage3() {
+            if (coin > 1000) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/gun5.png";
+				coin+=5;
+            }
+        }
+		
+	    function changeImage4() {
+            if (coin > 10000) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/gun7.png";
+				coin+=3;
+            }
+        }
+		
+	    function changeImage5() {
+            if (coin > 3000) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/snow.png";
+				coin+=3;
+            }
+        }
+		
+	    function changeImage6() {
+            if (coin > 400) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/gun9.png";
+				coin+=3;
+            }
+        }
+		
+	    function changeImage7() {
+            if (coin > 100000) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/coop.png";
+				coin+=1000000000;
+            }
+        };
+		
+		function zrozac() {
+           if (coin > 100000) {
+		      console.log("ZrozAC V1");
+              var newImage = document.getElementById("photo");
+              newImage.src = "zacv1/ban.png";
+			  rayLength-=1000;
+              coin = 0;			  
+		   }
+        };
+		
+		setInterval(zrozac, 1000);
+		
+		function zroz(el) {
+           coin++;
+	       console.log(coin);
+	       el.innerHTML = coin
+	       el.innerHTML = `<alt="Button Image"><span>${count}</span>`;
+        };
+
+		
+		/*function imageee() {
+		var img = document.getElementById("photo");
+        context.drawImage(img, 10, 10);
+		}*/
+		
+        // Функція головного циклу гри
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            update();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Запуск головного циклу гри
+        gameLoop();
+    </script>
+</body>
+</html>

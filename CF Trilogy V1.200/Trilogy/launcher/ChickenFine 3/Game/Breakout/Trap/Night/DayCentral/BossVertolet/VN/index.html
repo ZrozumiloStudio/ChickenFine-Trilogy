@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>END</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    #game {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url('back.png') no-repeat center center;
+      background-size: cover;
+    }
+    #character {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 80%;
+      pointer-events: none;
+    }
+    #dialogue-box {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 20px;
+    }
+    #dialogue-text {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .choice {
+      background: #1e1e1e;
+      border: 2px solid #fff;
+      padding: 10px;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+    .choice:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <img id="character" src="mike1.png" alt="Character">
+    <div id="dialogue-box">
+      <div id="dialogue-text">...</div>
+      <div id="choices"></div>
+    </div>
+  </div>
+
+  <script>
+    const story = [
+      {
+        text: "*10 minutes after you shot down the helicopter, you found its crash site and a nearly intact bag of money there*.\n Mike: O kurwa! How are we going to divide the money between us?",
+        choices: [
+          { text: "What does it mean to ''divide the money'' if you haven't even done anything useful? 100K for me, 0K for you, sounds quite right", next: 1 },
+          { text: "50K for me, 50K for you, okay?", next: 2 }
+        ]
+      },
+      {
+        text: "Mike: Pierdolisz! Dude, I don't think that's entirely fair",
+        choices: [
+          { text: "Hahahaha and what are you going to do to me?", url: "notgood/index.html" },
+		  { text: "70K for me, 30K for you, okay?", next: 3 }
+        ]
+      },
+      {
+        text: "Mike: Okay, we agreed. I guess we can go our separate ways now, right? Well, bye then...",
+        choices: [
+          { text: "Bye, buddy", url: "good/index.html" },
+        ]
+      },
+	  {
+        text: "Mike: O, ja pierdolę i knew that you would come to your senses! Otherwise the same thing would have happened to you as to that special forces soldier in New Central 5 years ago... anyway, it doesn't matter, well, goodbye, comrade!",
+        choices: [
+          { text: "Bye", url: "goodsecond/index.html" },
+        ],
+      },
+    ];
+
+    const dialogueText = document.getElementById('dialogue-text');
+    const choicesDiv = document.getElementById('choices');
+
+function showNode(index) {
+  const node = story[index];
+  dialogueText.innerHTML = node.text.replace(/\n/g, '<br>');
+  choicesDiv.innerHTML = '';
+
+  node.choices.forEach(choice => {
+    const btn = document.createElement('div');
+    btn.className = 'choice';
+    btn.textContent = choice.text;
+
+    btn.onclick = () => {
+      if (choice.url) {
+        window.location.href = choice.url; // Перенаправление
+      } else {
+        showNode(choice.next); // Переход по истории
+      }
+    };
+
+    choicesDiv.appendChild(btn);
+  });
+}
+
+
+    showNode(0);
+  </script>
+</body>
+</html>

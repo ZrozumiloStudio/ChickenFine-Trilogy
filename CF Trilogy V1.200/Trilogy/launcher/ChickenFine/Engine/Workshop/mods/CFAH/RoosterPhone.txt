@@ -1,0 +1,7 @@
+	<button class="button2" onclick="changeImage()">Skin "Chervonyi Mak" 30 money</button>
+	<button class="button2" onclick="changeImage2()">Skin "Nuggets" 100 money</button>
+	<button class="button2" onclick="changeImage6()">Skin "MizkoLamka" 400 money</button>
+	<button class="button2" onclick="changeImage3()">Skin "Alpha" 1000 money</button>
+	<button class="button2" onclick="changeImage5()">Skin "SnowU" 3000 money</button>
+	<button class="button2" onclick="changeImage4()">Skin "Borchivik" 10 000 money</button>
+	<button class="button2" onclick="changeImage7()">Skin "Rooster Coop" 100 000 money</button>

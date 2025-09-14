@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        canvas {
+            border: 1px #212121;
+            display: block;
+            margin: 20px auto;
+        }
+		
+		body {
+		background-color:#212121;
+		}
+		
+       .button {
+           top:50%;
+           background-color:#ace8a2;;
+           color: #1d5c13;;
+	       border:none;
+	       border-radius:5px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+
+.button:hover {
+      background-color:purple;
+	  color: #ffff;
+      transition: 0.7s;
+  }
+
+.button:active {
+    background-color: #ffbf00;
+	transition: 0.1s;
+}
+
+        canvas {
+            border: 1px solid #242424;
+			filter: grayscale(50%) sepia(30%) contrast(200%) blur(1px) brightness(1);
+			background-color:#d4ab55;
+			background: linear-gradient(to right, #808080, #9e9e9e, #808080);
+        }
+		
+        .dropdown-group {
+            display: flex;
+            gap: 15px; /* Расстояние между выпадающими кнопками */
+            margin-top: -700px;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            font-family: Arial, sans-serif;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #d4d4d4;
+            color: #ba2c22;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            background-color: #780800;
+            color: #cccccc;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ba0010;
+			color:#cccccc;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown button {
+            padding: 3px 20px;
+            cursor: pointer;
+            background-color: #d4d4d4;
+            color: #730800;
+            border: none;
+        }
+
+    </style>
+    <title>Zrozumilo Engine</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="1500" height="750"></canvas>
+    <button class="button" onclick="location.href='Ending/end.html';">Go to "The Zaza Team" base</button>
+	<button class="button" onclick="location.href='Endd/End/cutscene.html';">Go to the sewer</button>
+	<button id="rnew" class="button" onclick="radionew()">Radio "New Central"</button>
+	<input type="text" id="userInput" placeholder="Enter phone number">
+    <button id="checkButton">Call</button>
+	<p id="mission"style="position: absolute; top: 10px; left: 20px; font-family: monospace; color: #ffffff; background: rgba(245, 205, 137, 0.4);">Message from Mike: hi, i heard you need to get to that fucking thing right? <br> Anyway, you need to go through the pierdolony sewers and get out into the desert <br> and then i'll meet you and show you the way further, but <br> to get out of the sewers alive you need a model 5 R.P.A suit or  <br> you'll die from radiation, you can podkurwić it from the base of those anarchists, but then they can nakurwić komus you, so be careful and don't do odjebać. that's all, Pierdolę cie</p>
+	<img id="screenn" src="images/No.png" width="1500" height="750" style="position: absolute; top: 20px; left: 20px;">
+	<img id="gun" src="images/gun.png" width="1500" height="752" style="position: absolute; top: 20px; left: 20px;">
+
+    <script src = "engine.js"></script>
+</body>
+</html>

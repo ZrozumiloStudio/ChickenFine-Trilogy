@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIT</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        #gameContainer { position: relative; width: 300px; height: 300px; margin: 20px auto; background: black; overflow: hidden; }
+        #player { width: 20px; height: 20px; background: green; position: absolute; left: 140px; top: 140px; }
+        .attack { width: 10px; height: 20px; background: white; position: absolute; }
+        #health { font-size: 20px; margin-top: 10px; color: red; }
+		#enemy { width: 200px; height: 200px; position: absolute; left: 660px; top: 500px; }
+    </style>
+</head>
+<body>
+    <h1>MAKE AMERICA GREAT AGAIN.EXE</h1>
+    <div id="gameContainer">
+        <div id="player"></div>
+    </div>
+    <div id="health">HP: 5</div>
+	<img id="enemy" src="sprite.png" alt="Enemy">
+    <script>
+        let player = document.getElementById('player');
+        let container = document.getElementById('gameContainer');
+        let healthDisplay = document.getElementById('health');
+        let hp = 5;
+        let posX = 140, posY = 140;
+        let speed = 5;
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' && posY > 0) posY -= speed;
+            if (e.key === 'ArrowDown' && posY < 280) posY += speed;
+            if (e.key === 'ArrowLeft' && posX > 0) posX -= speed;
+            if (e.key === 'ArrowRight' && posX < 280) posX += speed;
+            player.style.left = posX + 'px';
+            player.style.top = posY + 'px';
+        });
+		
+function muzik() {
+    var audio = new Audio('i.mp3');
+    audio.addEventListener('ended', function() {
+        this.currentTime = 1;
+        this.play();
+    }, false);
+    audio.play();
+}
+
+window.addEventListener('load', function() {
+    setTimeout(muzik, 3000);
+});
+        
+        function spawnAttack() {
+            let attack = document.createElement('div');
+            attack.classList.add('attack');
+            attack.style.left = Math.random() * 290 + 'px';
+            attack.style.top = '0px';
+            container.appendChild(attack);
+            
+            let attackInterval = setInterval(() => {
+                let top = parseInt(attack.style.top);
+                attack.style.top = top + 5 + 'px';
+                
+                if (top > 280) {
+                    clearInterval(attackInterval);
+                    attack.remove();
+                }
+                
+                let playerRect = player.getBoundingClientRect();
+                let attackRect = attack.getBoundingClientRect();
+                if (!(playerRect.right < attackRect.left || playerRect.left > attackRect.right || 
+                      playerRect.bottom < attackRect.top || playerRect.top > attackRect.bottom)) {
+                    hp--;
+                    healthDisplay.innerText = 'HP: ' + hp;
+                    attack.remove();
+                    clearInterval(attackInterval);
+                    if (hp <= 0) window.location.href = 'https://www.trump.com/';
+                }
+            }, 50);
+        }
+        
+        setInterval(spawnAttack, 130);
+function menu() {
+window.location.href = 'wtf/index.html';
+}
+
+window.addEventListener('load', function() {
+	setTimeout(menu, 30000);
+});
+    </script>
+</body>
+</html>

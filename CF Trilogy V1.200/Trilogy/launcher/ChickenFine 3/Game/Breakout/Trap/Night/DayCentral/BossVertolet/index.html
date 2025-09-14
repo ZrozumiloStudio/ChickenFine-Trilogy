@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission "Boss Vertolet"</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB, #1E90FF);
+            font-family: Arial, sans-serif;
+            user-select: none;
+	 background-image: url('img/back.png');
+      background-size: cover; 
+      background-position: center; 
+      background-repeat: no-repeat; 
+        }
+		
+#message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size: 48px;
+  color: white;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 2s ease;
+  z-index: 199;
+  pointer-events: none;
+}
+
+#message.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+        
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #helicopter {
+            position: absolute;
+            width: 200px;
+            height: 100px;
+            background-image: url('img/boss.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transition: left 0.1s linear, top 0.1s linear;
+            z-index: 10;
+			filter: grayscale(23%) blur(1px) brightness(57%);
+-webkit-filter: grayscale(23%) blur(1px) brightness(57%);
+-moz-filter: grayscale(23%) blur(1px) brightness(57%);
+        }
+        
+        .missile {
+            position: absolute;
+            width: 40px;
+            height: 90px;
+            background-image: url('img/missile.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 5;
+            transform-origin: left center;
+			filter: grayscale(23%) blur(1px) brightness(57%);
+-webkit-filter: grayscale(23%) blur(1px) brightness(57%);
+-moz-filter: grayscale(23%) blur(1px) brightness(57%);
+        }
+        
+        #crosshair {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><circle cx="15" cy="15" r="10" fill="none" stroke="red" stroke-width="2"/><line x1="15" y1="5" x2="15" y2="25" stroke="red" stroke-width="2"/><line x1="5" y1="15" x2="25" y2="15" stroke="red" stroke-width="2"/></svg>');
+            background-size: contain;
+            pointer-events: none;
+            z-index: 20;
+        }
+        
+        #rpg {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 40px;
+            z-index: 15;
+        }
+        
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 0px;
+            z-index: 100;
+        }
+        
+        #wind-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 0px;
+            z-index: 100;
+        }
+        
+        #game-over {
+            position: absolute;
+			display: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 0px;
+            text-align: center;
+            display: none;
+            z-index: 200;
+        }
+        
+        button {
+            background-color: black;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 10px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border-radius: 0px;
+        }
+		
+#message4 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size: 48px;
+  color: white;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 2s ease;
+  z-index: 200;
+  pointer-events: none;
+}
+
+#message4.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+    .popup {
+      display: block;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -30%);
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 10px #000;
+      z-index: 1000;
+    }
+    .popup button {
+      margin-top: 10px;
+    } 
+    </style>
+</head>
+<body>
+<div id="overlay" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 0, 0, 0.3); /* затемнение, можно 0 для прозрачности */
+  z-index: 9;
+  pointer-events: auto;
+  display: none;
+"></div>
+<div id="popup1" class="popup">
+  <p>Mike: Ooo, ja pierdolę here we are... O KURWA IT'S A FUCKING HELICOPTER!!!! WJEBAĆ IT WITH A ROCKET LAUNCHER!!! I KNOW VLADISLAV MOROZOV IS FLYING IN IT!</p>
+  <button onclick="okbuddy()">OH FUCK FUCK FUCK OKAY I'M GONNA FUCK THIS HELICOPTER NOW</button>
+</div>
+<div id="message">MISSION FAILED</div>
+<div id="message4">MISSION PASSED</div>
+    <div id="game-container">
+        <div id="helicopter"></div>
+        <div id="crosshair"></div>
+        <div id="rpg"></div>
+        
+        <div id="ui">
+            <div>Missile left: <span id="missiles-left">4</span></div>
+            <div>Damage caused to the helicopter: <span id="hits">0</span>/4</div>
+        </div>
+        
+        <div id="wind-indicator">
+            Wind speed: <span id="wind-value">0</span> m/s
+        </div>
+        
+        <div id="game-over">
+            <h2 id="result-message">MISSION PASSED!</h2>
+            <button id="restart-button">Try again knowing that you will fail.</button>
+        </div>
+    </div>
+
+    <script>
+	
+	function okbuddy() {
+	  const music = new Audio("wgnrride.wav");
+      music.loop = true;
+	  music.play();
+	  music.volume = 0.1;
+	  document.getElementById('popup1').style.display = 'none';
+	}
+	
+        let missilesLeft = 5;
+        let hits = 0;
+        let windSpeed = 1;
+        let gameActive = true;
+        let helicopterX = 0;
+        let helicopterY = 0;
+        let helicopterDirection = 1;
+        let helicopterSpeed = 1;
+        let missiles = [];
+        let lastTime = 0;
+        
+        let gameWidth = 0;
+        let gameHeight = 0;
+        let helicopterWidth = 200;
+        let helicopterHeight = 100;
+        
+        const gameContainer = document.getElementById('game-container');
+        const helicopter = document.getElementById('helicopter');
+        const crosshair = document.getElementById('crosshair');
+        const missilesLeftDisplay = document.getElementById('missiles-left');
+        const hitsDisplay = document.getElementById('hits');
+        const windValueDisplay = document.getElementById('wind-value');
+        const gameOverScreen = document.getElementById('game-over');
+        const resultMessage = document.getElementById('result-message');
+        const restartButton = document.getElementById('restart-button');
+        
+        function updateWind() {
+            windSpeed += (Math.random() * 2 - 1) * 0.5;
+            
+            windSpeed = Math.max(-10, Math.min(10, windSpeed));
+            
+            windValueDisplay.textContent = Math.abs(windSpeed).toFixed(1);
+            
+            if (windSpeed > 0) {
+                windValueDisplay.style.color = 'red';
+            } else if (windSpeed < 0) {
+                windValueDisplay.style.color = 'blue';
+            } else {
+                windValueDisplay.style.color = 'white';
+            }
+        }
+        
+        function fireMissile(targetX, targetY) {
+            if (!gameActive || missilesLeft <= 0) return;
+            
+            missilesLeft--;
+            missilesLeftDisplay.textContent = missilesLeft;
+            
+            const rpgRect = document.getElementById('rpg').getBoundingClientRect();
+            const startX = rpgRect.left + rpgRect.width / 2;
+            const startY = rpgRect.top;
+            
+            const missile = document.createElement('div');
+            missile.className = 'missile';
+            missile.style.left = `${startX}px`;
+            missile.style.top = `${startY}px`;
+            
+            // Calculate initial angle
+            const dx = targetX - startX;
+            const dy = targetY - startY;
+            let angle = Math.atan2(dy, dx);
+            missile.style.transform = `rotate(${angle}rad)`;
+            
+            gameContainer.appendChild(missile);
+            
+            missiles.push({
+                element: missile,
+                x: startX,
+                y: startY,
+                angle: angle,
+                speed: 5,
+                windInfluence: 0,
+                active: true
+            });
+        }
+        
+        function initGame() {
+            missilesLeft = 5;
+            hits = 0;
+            gameActive = true;
+            missiles = [];
+            
+            gameWidth = gameContainer.clientWidth;
+            gameHeight = gameContainer.clientHeight;
+            
+            document.querySelectorAll('.missile').forEach(m => m.remove());
+            
+            missilesLeftDisplay.textContent = missilesLeft;
+            hitsDisplay.textContent = hits;
+            
+            gameOverScreen.style.display = 'none';
+            
+            updateWind();
+            
+            positionHelicopter();
+            
+            lastTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function positionHelicopter() {
+            helicopterX = Math.random() * (gameWidth - helicopterWidth);
+            helicopterY = Math.random() * (gameHeight / 2);
+            
+            helicopterDirection = Math.random() > 0.5 ? 1 : -1;
+            helicopterSpeed = 3 + Math.random() * 1.5;
+            
+            updateHelicopterPosition();
+        }
+        
+        function updateHelicopterPosition() {
+            helicopter.style.left = `${helicopterX}px`;
+            helicopter.style.top = `${helicopterY}px`;
+            helicopter.style.transform = `scaleX(${helicopterDirection})`;
+        }
+        
+        function checkCollision(missileX, missileY) {
+            return (
+                missileX >= helicopterX &&
+                missileX <= helicopterX + helicopterWidth &&
+                missileY >= helicopterY &&
+                missileY <= helicopterY + helicopterHeight
+            );
+        }
+        
+        function endGame(success) {
+            gameActive = false;
+            
+            if (success) {
+                xp++;
+            } else {
+                showSdox();
+            }
+            
+            gameOverScreen.style.display = 'none';
+        }
+        
+        function gameLoop(currentTime) {
+            if (!gameActive) return;
+            
+            const deltaTime = (currentTime - lastTime) / 16; 
+            lastTime = currentTime;
+            
+            helicopterX += helicopterSpeed * helicopterDirection * deltaTime;
+            
+            if (helicopterX <= 0) {
+                helicopterX = 0;
+                helicopterDirection = 1;
+            } else if (helicopterX >= gameWidth - helicopterWidth) {
+                helicopterX = gameWidth - helicopterWidth;
+                helicopterDirection = -1;
+            }
+            
+            helicopterY += Math.sin(currentTime / 1000) * 0.5 * deltaTime;
+            
+            helicopterY = Math.max(0, Math.min(gameHeight / 2, helicopterY));
+            
+            updateHelicopterPosition();
+            
+            if (Math.random() < 0.02) {
+                updateWind();
+            }
+            
+            for (let i = missiles.length - 1; i >= 0; i--) {
+                const missile = missiles[i];
+                
+                missile.windInfluence += windSpeed * 0.01 * deltaTime;
+                
+                missile.angle += missile.windInfluence * 0.01 * deltaTime;
+                
+                missile.x += Math.cos(missile.angle) * missile.speed * deltaTime;
+                missile.y += Math.sin(missile.angle) * missile.speed * deltaTime;
+                
+                missile.element.style.left = `${missile.x}px`;
+                missile.element.style.top = `${missile.y}px`;
+                missile.element.style.transform = `rotate(${missile.angle}rad)`;
+                
+                if (
+                    missile.x < -30 || 
+                    missile.x > gameWidth + 30 || 
+                    missile.y < -30 || 
+                    missile.y > gameHeight + 30
+                ) {
+                    missile.element.remove();
+                    missiles.splice(i, 1);
+                    continue;
+                }
+                
+                if (checkCollision(missile.x, missile.y)) {
+                    hits++;
+                    hitsDisplay.textContent = hits;
+                    missile.element.remove();
+					var audio = new Audio('SFX/boom.wav');	
+                    audio.play();
+                    missiles.splice(i, 1);
+                    
+                    if (hits >= 4) {
+                        endGame(true);
+						passed();
+                        return;
+                    }
+                }
+            }
+            
+            if (missilesLeft <= 0 && missiles.length === 0 && hits < 4) {
+                endGame(false);
+                return;
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        gameContainer.addEventListener('mousemove', (e) => {
+            crosshair.style.left = `${e.clientX - 15}px`;
+            crosshair.style.top = `${e.clientY - 15}px`;
+        });
+        
+        gameContainer.addEventListener('click', (e) => {
+            if (gameActive) {
+                fireMissile(e.clientX, e.clientY);
+            }
+        });
+        
+        restartButton.addEventListener('click', initGame);
+		
+		xp = 1;
+		
+function passed() {
+    if (xp > 0) {
+	passedtheme();
+	setTimeout(nextmission, 6000);
+	  document.getElementById("message4").classList.add("show");
+      setTimeout(() => {
+        document.getElementById("message4").classList.remove("show");
+      }, 5000); // убирается через 2 секунды
+	  cancelAnimationFrame(animationId);
+   } 
+}
+
+function passedtheme() {
+const muzika = new Audio("passed.mp3");
+muzika.play();
+muzika.volume = 1;
+}
+
+function nextmission() {
+	window.location.href = "vn/index.html";
+}
+
+    function showSdox() {
+	document.getElementById('overlay').style.display = 'block';
+	const hits = new Audio("SFX/sdox.wav");
+	hits.play();
+      document.getElementById("message").classList.add("show");
+      setTimeout(() => {
+        document.getElementById("message").classList.remove("show");
+      }, 2000); // убирается через 2 секунды
+    }
+        
+        initGame();
+    </script>
+</body>
+</html>

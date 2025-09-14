@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2e2e2e;
+    background-image: url(finemenu2.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: 98% 100%; 
+}
+
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-left: -1200px;
+            margin-top: 40px;
+        }
+
+        .menu-button {
+            padding: 3px 30px;
+            font-size: 18px;
+            background-color: #e0e0e0;
+            color: #960500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 2px;
+            font-size: 30px;
+        }
+
+        .menu-button:hover {
+            background-color: #97c754;
+			color: #000000;
+        }
+
+        .menu-button:active {
+            background-color: #3e8e41;
+        }
+        
+        .dropdown-group {
+            display: flex;
+            gap: 15px; 
+            margin-top: -5px;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            font-family: Arial, sans-serif;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #d4d4d4;
+            color: #ba2c22;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            background-color: #780800;
+            color: #cccccc;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ba0010;
+			color:#cccccc;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown button {
+            padding: 3px 20px;
+            cursor: pointer;
+            background-color: #d4d4d4;
+            color: #730800;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <button class="menu-button" onclick="redirect()">Singleplayer</button>
+        <button class="menu-button" onclick="redirect4()">Multiplayer</button>
+        <button class="menu-button" onclick="redirect3()">Website</button>
+        <button class="menu-button" onclick="redirectw()">Workshop</button>
+
+        <div class="dropdown-group">
+            <div class="dropdown">
+                <button>Graphics</button>
+                <div class="dropdown-content">
+                    <a href="vedropc.html">Low</a>
+                    <a href="game.html">Normal</a>
+                    <a href="ciborsrank.html">Ultra</a>
+                </div>
+            </div>
+
+    <script>
+        function redirect() {
+            window.location.href = 'vedropc.html';
+        }
+        
+        function redirect3() {
+            window.location.href = 'https://zrozumilostudio.github.io/';
+        }
+        
+        function redirect4() {
+            window.location.href = 'Engine/serverlist.html';
+        }
+        
+        function redirectw() {
+            window.location.href = 'Engine/workshop/workshop.html';
+        }
+
+        function music() {
+            var audio = new Audio('Engine/verse.mp3');
+            audio.addEventListener('ended', function() {
+                this.currentTime = 1;
+                this.play();
+            }, false);
+            audio.play();
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(music, 1000);
+        });
+    </script>
+</body>
+</html>

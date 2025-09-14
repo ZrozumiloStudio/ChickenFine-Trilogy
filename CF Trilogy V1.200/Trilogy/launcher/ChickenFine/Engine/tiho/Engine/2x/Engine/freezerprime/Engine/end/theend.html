@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+		
+		body {
+			background-color:#ffffff;
+		}
+		
+       .button {
+           top:50%;
+           background-color:#0a0a23;
+           color: #fff;
+	       border:none;
+	       border-radius:5px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+
+.button:hover {
+      background-color:purple;
+      transition: 0.7s;
+  }
+
+.button:active {
+    background-color: #ffbf00;
+	transition: 0.1s;
+}
+
+       .button2 {
+           top:50%;
+           background-color:#451936;
+           color: #fff;
+	       border:none;
+	       border-radius:3px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+
+.button2:hover {
+      background-color:#7a1c31;
+      transition: 0.7s;
+  }
+
+.button2:active {
+    background-color: #ffbf00;
+	transition: 0.1s;
+}
+
+       .button3 {
+           top:50%;
+           background-color:#000000;
+           color: #fff;
+	       border:none;
+	       border-radius:10px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+		
+       .button4 {
+           top:50%;
+           background-color:green;
+           color: #fff;
+	       border:none;
+	       border-radius:3px;
+	       min-height:30px; 
+           min-width: 120px;
+        }
+		
+.button4:hover {
+      background-color:#451936;
+      transition: 0.7s;
+  }
+
+.button3:hover {
+      background-color:#212121;
+      transition: 0.7s;
+	  box-shadow: 0px 0px 2px 2px rgb(0,0,0);
+	  background: #ffffff url(https://kartinki.pics/uploads/posts/2021-07/1625829374_14-kartinkin-com-p-oboi-so-znakom-radiatsii-krasivie-15.jpg) center center/cover no-repeat;
+	  color: #00000;
+	  transition-delay: 0.1s;
+      transition: 1s;
+	  filter: invert(100%);
+      letter-spacing: 5px;
+      outline: 10px dashed #ff9500;
+      cursor: pointer;
+	  monospace
+	  font-weight: 1000
+  }
+
+.button3:active {
+    background-color: #ffffff;
+	transition: 0.3s;
+	filter: invert(0%);
+	letter-spacing: 0px;
+}
+
+        #photo {
+            position: absolute;
+            top: -20px;
+            left: 520px;
+            transition: transform 0.2s ease;
+        }
+
+    </style>
+    <title>Zrozumilo Engine</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="1500" height="600" style="overflow: hidden;"></canvas>
+	<button class="button4" id="shakeButton" onclick="shoot()">GAS!</button>
+	<button class = "button4" onclick="zroz(this)">click to XP</button>
+	<img id="spriteImage" src="Engine/NextBOTS/sprite.png" style="display: none;">
+	<img id="spritev2" src="nuggets.png" alt="My Image" style="width: 1px; height: 1px; position: absolute; top: 300px; left: 600px; max-height: 300px; max-width: 500px; filter: blur(0px);">
+	<img id="photo" src="car.png" width="1500" height="600" style="position: absolute; top: 20px; left: 20px;">
+	<img id="bggg" src="weapon/No.png" width="1500" height="600" style="position: absolute; top: 20px; left: 20px; opacity: 0.3;">
+    <img id="rpa" src="weapon/RPA2.png" width="1500" height="600" style="position: absolute; top: 20px; left: 20px;">
+
+
+    <script>
+        // Отримання елементу canvas та його контексту
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ініціалізація об'єкта гравця
+        const player = {
+            x: 200,
+            y: 70,
+            direction: Math.PI / 100, // Початковий напрямок (45 градусів)
+            speed: 4,
+            rotationSpeed: Math.PI / 10000, // Швидкість обертання
+			hp:100,
+        };
+		
+const sprites = [
+    { src: 'Engine/NextBOTS/sprite.png', x: 100, y: 100 },
+    // Додайте інші спрайти тут
+];
+
+function drawSprites() {
+    for (const sprite of sprites) {
+        ctx.drawImage(document.getElementById('spriteImage'), sprite.x, sprite.y);
+    }
+}
+
+let spriteWidth = 0.0000001; // Початкова ширина спрайта
+let spriteHeight = 0.0000001; // Початкова висота спрайта
+const scaleStep = 0.1; // Крок зміни масштабу
+
+	//NPC-V2
+	
+	function spritevt() {
+	 const img = document.getElementById('spritev2');
+	 const currentWidth = img.offsetWidth;
+     const currentHeight = img.offsetHeight;
+	 img.style.width = (currentWidth + 0.6) + 'px';  
+     img.style.height = (currentHeight + 0.6) + 'px'; 
+	}
+	
+	function spritevtm() {
+	 const img = document.getElementById('spritev2');
+	 const currentWidth = img.offsetWidth;
+     const currentHeight = img.offsetHeight;
+	 img.style.width = (currentWidth + -0.6) + 'px';  
+     img.style.height = (currentHeight + -0.6) + 'px'; 
+	}
+	
+	function spriteleft() {
+	 const img = document.getElementById('spritev2');
+	 const currentLeft = parseInt(window.getComputedStyle(img).left, 10);	 
+	 img.style.left = (currentLeft + 1.5) + 'px';
+	}
+	
+	function spriterig() {
+	 const img = document.getElementById('spritev2');
+	 const currentLeft = parseInt(window.getComputedStyle(img).left, 10);	 
+	 img.style.left = (currentLeft + -1.8) + 'px';
+	}
+	//
+	
+	function audiog() {
+	 var audio = new Audio('maraz1.wav');
+     audio.play();
+	}
+	
+	setInterval(audiog, 4000);
+	
+	function audiog2() {
+	 var audio = new Audio('maraz3.wav');
+     audio.play();
+	}
+	
+	setInterval(audiog2, 11000);
+		
+function redirectIfMatch() {
+    // Отримання
+    var userInput = document.getElementById('textInput').value;
+    
+    // Перевірка
+    if (userInput.toLowerCase() === 'opendevzrozz') {
+        // перенаправлення
+        window.location.href = 'Engine/maps/revolver/revolver.html';
+    } else {
+        alert('NO');
+    }
+}
+
+class CF2_Vehicles {
+  constructor(speed, agility, vehicleid) {
+    this.speed = speed;
+	this.agility = agility;
+	this.vehicleid = vehicleid;
+  }
+}
+
+var buggy = new CF2_Vehicles('50', 'good', 'buggy');
+console.log(buggy);
+
+        var photo = document.getElementById("photo");
+        var shakeButton = document.getElementById("shakeButton");
+        var shakeIntensity = 300; // Початкова інтенсивнітсь
+        var maxShakeIntensity = 900; // Максимальна інтенсивність тряски
+        var shakeDuration = 200; // Час тряски у мілісекундах
+        var lastShakeTime = Date.now(); // час тряски останнньюоі ностан... остан... ПАСЛЕДНЯЙ
+
+        function shakeImage() {
+            var currentTime = Date.now();
+            if (currentTime - lastShakeTime > shakeDuration) {
+                lastShakeTime = currentTime;
+                var randomX = Math.random() * shakeIntensity * 2 - shakeIntensity;
+                var randomY = Math.random() * shakeIntensity * 2 - shakeIntensity;
+                photo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                // Збільшуєм інтенсивність тряски за декілька кліків
+                if (shakeIntensity < maxShakeIntensity) {
+                    shakeIntensity += 3;
+                }
+            }
+        }
+
+        // Функция для остановки тряски
+        function stopShake() {
+            photo.style.transform = "translate(0px, 0px)";
+            shakeIntensity = 10; // Сбрасываем интенсивность тряски после остановки
+        }
+		
+        function playSound() {
+            var audio = new Audio('car.mp3');
+            audio.play();
+        }
+	
+	var musicaaa = 0;
+	
+function rains() {
+    var audio = new Audio('Engine/Assets/theend.mp3');
+    audio.addEventListener('ended', function() {
+        this.currentTime = 1;
+        this.play();
+    }, false);
+    audio.play();
+	if(musicaaa => 1) return false;
+}
+
+function sdoxxsound() {
+	musicaaa = 1;
+}
+
+function musicsnus() {
+    var audio = new Audio('Engine/Assets/ATHEYM.mp3');
+    audio.addEventListener('ended', function() {
+        this.currentTime = 1;
+        this.play();
+    }, false);
+    audio.play();
+}
+
+window.addEventListener('load', function() {
+    setTimeout(rains, 1000);
+});
+
+
+        shakeButton.addEventListener("click", shakeImage);
+        shakeButton.addEventListener("mouseup", stopShake);
+
+        // Ініціалізація карти гри
+        var map = [
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ];
+
+        // Довжина променя від гравця для raycasting
+        var rayLength = 230;
+
+        // Додавання слухачів подій для обробки натискань клавіш
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+
+        // Об'єкт для відстеження стану натискань клавіш
+        const keys = {
+            forward: false,
+            backward: false,
+            left: false,
+            right: false,
+        };
+
+        // Обробник натискань клавіш
+        function handleKeyDown(event) {
+            if (event.key === 'w') keys.forward = true;
+            if (event.key === 's') keys.backward = true;
+            if (event.key === 'a') keys.left = true;
+            if (event.key === 'd') keys.right = true;
+        }
+
+        function handleKeyUp(event) {
+            if (event.key === 'w') keys.forward = false;
+            if (event.key === 's') keys.backward = false;
+            if (event.key === 'a') keys.left = false;
+            if (event.key === 'd') keys.right = false;
+        }
+
+        // Функція для оновлення стану гри
+        function update() {
+            // Обробка введення та оновлення стану гравця
+            if (keys.forward) {
+                player.x += player.speed * Math.cos(player.direction);
+                player.y += player.speed * Math.sin(player.direction);
+				spriteWidth *= (1 + scaleStep);
+                spriteHeight *= (1 + scaleStep);
+				spritevt();
+            }
+            if (keys.backward) {
+				player.x += player.speed * Math.cos(player.direction);
+                player.y += player.speed * Math.sin(player.direction);
+				spritevt();
+				//spriteWidth *= (1 - scaleStep);
+                //spriteHeight *= (1 - scaleStep);
+            }
+            if (keys.left) {
+                player.direction -= player.rotationSpeed;
+				spriteWidth *= (1 + scaleStep);
+                spriteHeight *= (1 + scaleStep);
+				spriteleft();
+            }
+            if (keys.right) {
+                player.direction += player.rotationSpeed;
+				spriteWidth *= (1 + scaleStep);
+                spriteHeight *= (1 + scaleStep);
+				spriterig();
+            }
+
+            // Raycasting
+            for (let i = 0; i < canvas.width; i++) {
+                const angle = player.direction - Math.PI / 6 + (i / canvas.width) * (Math.PI / 3);
+                let rayX = player.x;
+                let rayY = player.y;
+                let rayDistance = 0;
+
+                while (rayDistance < rayLength) {
+                    rayX += Math.cos(angle);
+                    rayY += Math.sin(angle);
+
+                    if (map[Math.floor(rayY / 50)][Math.floor(rayX / 50)] === 1) {
+                        break;
+                    }
+
+                    rayDistance += 1;
+                }
+
+                var lineHeight = (canvas.height / rayDistance) * 70;
+                const brightness = 1 - Math.min(1, rayDistance / rayLength); // Простий розрахунок яскравості
+                const wallColor = `rgba(18, 18, 18, ${brightness})`; //колір стіни
+
+                ctx.fillStyle = wallColor;
+                ctx.fillRect(i, (canvas.height - lineHeight) / 2, 1, lineHeight);
+            }
+
+            // Малювання гравця
+            // ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, 5, 0, 2 * Math.PI);
+            // ctx.fill();
+        }
+		
+		
+		function theFogIsComing() {
+			rayLength-=1;
+		}
+		
+		function removefog() {
+            rayLength+=20;
+			console.log(rayLength)
+        }
+
+		
+		function addfog() {
+            rayLength-=25;
+			console.log(rayLength)
+        }
+		
+		var xp = 0;
+		
+		function xpadd() {
+            xp++;
+			console.log(`XP: ${xp}`);
+			console.log(`HP: ${player.hp}`);
+			console.log(`SNUS: ${snusik}`);
+		}
+		
+		setInterval(xpadd, 1000);
+		
+		if (xp == 30) {
+		  console.log("30 XP");
+		};
+		
+		
+        function changeImage() {
+            if (xp > 30) {
+                var newImage = document.getElementById("photo");
+                newImage.src = "weapon/gun22.png";
+				xp++;
+            }
+        }
+		
+        function Armor() {
+            if (xp > 1000) {
+                var newarmor = document.getElementById("rpa");
+                newarmor.src = "weapon/RPA2.png";
+				xp-=1000;
+                player.speed = 2;
+				player.hp = 300;
+		        setInterval(theFogIsComing, 400);
+            }
+        }
+		
+		function stonks() {
+			xp+=100
+		}
+		
+        function Drobash() {
+            if (xp > 300) {
+                var newgun = document.getElementById("photo");
+                newgun.src = "weapon/brobashryki.png";
+				xp-=300;
+				player.hp = 150;
+				setInterval(stonks, 10000);
+            }
+        }
+		
+        function BMedkit() {
+            if (xp > 100) {
+				xp-=100;
+				player.hp+=75;
+            }
+        }
+		
+        function Medkit() {
+            if (xp > 50) {
+				xp-=50;
+				player.hp+=50;
+            }
+        }
+		
+        function MMedkit() {
+            if (xp > 25) {
+				xp-=25;
+				player.hp+=25;
+            }
+        }
+		
+		function SnusiikSound() {
+            var audio = new Audio('Engine/Assets/signal.wav');
+            audio.play();
+        }
+		
+		var snusik = 0;
+		
+        function snus() {
+            if (xp > 150) {
+				xp-=150;
+				player.hp-=25;
+				player.speed+=5
+				var newarmor = document.getElementById("rpa");
+                newarmor.src = "weapon/snus.png";
+				snusik++;
+				SnusiikSound();
+				musicsnus();
+            }
+        }
+		
+		function shoot() {		
+			playSound();
+            player.x += player.speed * Math.cos(player.direction);
+			spriteWidth *= (1 + scaleStep);
+            spriteHeight *= (1 + scaleStep);
+         };
+		
+	    function death() {
+            if (player.hp <= 0) {
+                var deathsc = document.getElementById("rpa");
+                deathsc.src = "Engine/Assets/death/end.png";
+				xp=0;
+				sdoxxsound();
+            }
+        };
+		
+		function sdoxni() {
+			player.hp-=11;
+		};
+		
+		function suicide() {
+			player.hp=0;
+		};
+		
+		setInterval(death, 1000);
+		setInterval(sdoxni, 1000);
+		
+		//Спагетті
+		
+		function zroz(el) {
+           xp++;
+	       console.log(xp);
+	       el.innerHTML = xp
+	       el.innerHTML = `<alt="Button Image"><span>${count}</span>`;
+        };
+
+		
+		/*function imageee() {
+		var img = document.getElementById("photo");
+        context.drawImage(img, 10, 10);
+		}*/
+		
+        // Функція головного циклу гри
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            update();
+            requestAnimationFrame(gameLoop);
+			ctx.drawImage(document.getElementById('spriteImage'), 600, 250, spriteWidth, spriteHeight);
+        }
+
+        // Запуск головного циклу гри
+        gameLoop();
+    </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #2e2e2e;
+            background-image: url(finemenu2.png);
+            background-repeat: no-repeat;
+			background-position: center center;
+			background-attachment: fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+			margin-left: -1200px;
+			margin-top: 40px;
+        }
+
+        .menu-button {
+            padding: 3px 30px;
+            font-size: 18px;
+            background-color: #ea0000;
+            color: #4c0000;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 2px;
+			font-size: 30px;
+        }
+
+        .menu-button:hover {
+            background-color: #c40000;
+        }
+
+        .menu-button:active {
+            background-color: #ff0000;
+        }
+		
+        .dropdown {
+            position: relative;
+            display: inline-block;
+			font-family: Arial, sans-serif;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #ea0000;
+            color: #4c0000;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+			font-family: Arial, sans-serif;
+        }
+
+        .dropdown-content a {
+            background-color: #ea0000;
+            color: #4c0000;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+			font-family: Arial, sans-serif;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #c40000; 
+			font-family: Arial, sans-serif;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown button {
+		    font-family: Arial, sans-serif;
+			margin-top: -30px;
+            padding: 3px 20px;
+            cursor: pointer;
+            background-color: #c40000;
+            color: #ea0000;
+			border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <button class="menu-button" onclick="redirect()">Singleplayer</button>
+        <button class="menu-button" onclick="redirect4()">Work in Progress</button>
+        <button class="menu-button" onclick="redirect3()">Original Game</button>
+		<button class="menu-button" onclick="redirectmod()">Author of Mod</button>
+<div class="dropdown">
+    <button>Graphics</button>
+    <div class="dropdown-content">
+        <a href="hosp.html">Low</a>
+        <a href="game.html">Normal</a>
+        <a href="ciborsrank.html">Ultra</a>
+    </div>
+</div>
+    </div>
+
+    <script>
+        function redirect() {
+            window.location.href = 'hosp.html';
+        }
+		
+		function redirect2() {
+            window.location.href = 'hard.html';
+        }
+		
+        function redirect3() {
+            window.location.href = 'https://zrozumilostudio.github.io/';
+        }
+		
+		function redirect4() {
+            window.location.href = 'index.html';
+        }
+		
+	    function redirectmod() {
+            window.location.href = 'https://youtube.com/@snowutlove_yt';
+        }
+		
+function music() {
+    var audio = new Audio('AHs Content/Music/Menu.mp3');
+    audio.addEventListener('ended', function() {
+        this.currentTime = 1;
+        this.play();
+    }, false);
+    audio.play();
+}
+
+window.addEventListener('load', function() {
+    setTimeout(music, 1000);
+});
+    </script>
+</body>
+</html>

@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>END</title>
+    <style>	
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(77, 77, 77, 1) 50%, rgba(89, 89, 89, 1) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+        }
+        
+        #renderer {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+filter: grayscale(8%) blur(1px) brightness(137%);
+-webkit-filter: grayscale(8%) blur(1px) brightness(137%);
+-moz-filter: grayscale(8%) blur(1px) brightness(137%);
+        }
+        
+        #minimap {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid #fff;
+			border-radius: 100px;
+        }
+        
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 0px;
+			  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size:20px;
+        }
+        
+        #health {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 0px;
+			  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size:20px;
+        }
+        
+        #enemy-image, #sprite-image, #sprite-palm {
+            display: none;
+        }
+		
+
+
+.button1 {
+  font-size:18px;
+  font-family:Arial;
+  width:200px;
+  height:30px;
+  border-width:1px;
+  color:#fff;
+  border-color:#566963;
+  font-weight:bold;
+  font-style:italic;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  box-shadow:inset 0px 1px 3px 0px #91b8b3;
+  text-shadow:inset 0px -1px 0px #2b665e;
+  background: linear-gradient(0deg,rgba(0, 0, 0, 0.5) 0%, rgba(41, 41, 41, 1) 50%, rgba(74, 74, 74, 1) 100%);
+}
+
+.button1:hover {
+  background: linear-gradient(#6c7c7c, #768d87);
+}
+
+    .cheat-menu {
+      background: linear-gradient(0deg,rgba(0, 0, 0, 0.5) 0%, rgba(41, 41, 41, 1) 50%, rgba(74, 74, 74, 1) 100%);
+      border: 2px solid #555;
+      padding: 20px;
+      width: 250px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: none;
+	  color:white;
+    }
+
+    .cheat-menu.active {
+      display: block;
+    }
+
+    .cheat-menu h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      text-align: center;
+	  color:white;
+    }
+
+    .cheat-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #444;
+	  color:white;
+    }
+
+    .cheat-option:last-child {
+      border-bottom: none;
+    }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-left: 10px;
+      accent-color: #00ff00;
+    }
+
+#message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size: 48px;
+  color: white;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 2s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#message.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#message2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size: 48px;
+  color: yellow;
+  background-color: purple;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 2s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#message2.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#message3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size: 48px;
+  color: red;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 2s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#message3.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.Kazik {
+	box-shadow:inset 0px 1px 0px 0px #fff6af;
+	background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+	background-color:#ffec64;
+	border-radius:6px;
+	border:1px solid #ffaa22;
+	display:inline-block;
+	cursor:pointer;
+	color:#333333;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:2px 21px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffee66;
+}
+.Kazik:hover {
+	background:linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+	background-color:#ffab23;
+}
+.Kazik:active {
+	position:relative;
+	top:1px;
+}
+
+    #overlay2 {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+	
+    #overlay3 {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+	  display: none;
+    }
+
+    #modal {
+      background: #90ff61;
+      padding: 20px 30px;
+      text-align: center;
+      box-shadow: 0 0 10px black;
+	  color:black;
+	  width:400px;
+    }
+	
+	#modal2 {
+	  display: none;
+      background: black;
+      padding: 20px 30px;
+      text-align: center;
+	  color:white;
+	  width:400px;
+    }
+	
+
+    #okBtn {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #okBtn:hover {
+      background: white;
+    }
+
+    #okBtn2 {
+	  display: none;
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: white;
+      color: black;
+      border: none;
+      cursor: pointer;
+    }
+
+    #okBtn2:hover {
+      background: black;
+	  color: white;
+    }  	
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -30%);
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 10px #000;
+      z-index: 1000;
+    }
+    .popup button {
+      margin-top: 10px;
+    }   
+
+
+.radiobtn {
+  font-size:15px;
+  font-family:Arial;
+  width:200px;
+  height:29px;
+  border-width:1px;
+  color:#ffffff;
+  border-color:#ee1eb5;
+  font-weight:bold;
+  border-top-left-radius:0px;
+  border-top-right-radius:0px;
+  border-bottom-left-radius:0px;
+  border-bottom-right-radius:0px;
+  box-shadow:inset 0px 1px 0px 0px #fbafe3;
+  text-shadow:inset 0px 1px 0px #c70067;
+  background:linear-gradient(#ff5bb0, #ef027d);
+}
+
+.radiobtn {
+  background: linear-gradient(#ef027d, #ff5bb0);
+}
+
+#message4 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-size: 48px;
+  color: white;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 2s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#message4.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+              	
+    </style>
+</head>
+<body>
+<div id="overlay" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 0, 0, 0.3); /* затемнение, можно 0 для прозрачности */
+  z-index: 9;
+  pointer-events: auto;
+  display: none;
+"></div>
+  <div id="overlay2">
+    <div id="modal">
+      <p>You got your 70K back!</p>
+      <button id="okBtn">OK</button>
+    </div>
+  </div>
+<div id="popup1" class="popup">
+  <p>Mike: I think I know the way to Green Central but but...  ja pierdolę i forgot! Usually microdosing helps me remember</p>
+  <button onclick="openSecond()">ahhh fuck, I never thought I'd be looking for a debtor in a tropical forest with a junkie.</button>
+</div>
+
+<div id="popup2" class="popup">
+  <p>Mike: Wait, KURWA JA PIERDOLE!!! DID YOU SAY MOROZOV?! I know that pierdolony bastard, he stole 10K from me and disappeared without a trace! If you know where he is, I'll even help you find him to wjebać the fuck out of him</p>
+  <button onclick="openThird()">Yes, he also stole money from me, a lot of money, well, shall we go?</button>
+</div>
+
+<div id="popup3" class="popup">
+  <p>Okay, let's go.</p>
+  <button onclick="goToNextPage()">OK</button>
+</div>
+	<div id="message">PIZDA TEBE</div>
+	<div id="message2">You won at the casino!</div>
+	<div id="message3">YOU LOST MONEY IN THE CASINO!</div>
+	<div id="message4">MISSION PASSED</div>
+    <div id="game-container">
+        <canvas id="renderer"></canvas>
+        <canvas id="minimap"></canvas>
+        <div id="controls">
+            XP: 
+        </div>
+        <div id="health">
+            Health: 100
+        </div>
+        <img id="enemy-image" src="images/police.png" alt="Enemy">
+        <img id="sprite-image" src="images/kust.png" alt="Sprite">
+		<img id="sprite-palm" src="images/palm.png" alt="Sprite">
+				<button class="button1" onclick="medkit()">Medkit (30 XP)</button>
+		<button class="button1" onclick="marijuana()">Marijuana (35 XP)</button>
+		<button class="button1" onclick="Heroin()">Heroin (100 XP)</button>
+		<br>
+		<button class="Kazik" id="randomize">CASINO "1XGAY"</button>
+		<button id="rneww" class="radiobtn" onclick="radioneww()">Radio "Classic FM"</button>
+		  <div class="cheat-menu" id="cheatMenu">
+    <h2>Developer mode</h2>
+    <div class="cheat-option">
+      <label for="speedhack">Infinite XP</label>
+      <input type="checkbox" id="xpcheat">
+    </div>
+    <div class="cheat-option">
+      <label for="godmode">GodMode</label>
+      <input type="checkbox" id="godmode">
+    </div>
+    <div class="cheat-option">
+      <label for="aimbot">Edge of oblivion</label>
+      <input type="checkbox" id="SnoopDog">
+    </div>
+	<div class="cheat-option">
+      <label for="aimbot">Pixels</label>
+      <input type="checkbox" id="Pixels">
+    </div>
+    <div class="cheat-option">
+      <label for="aimbot">Velosipe Mode</label>
+      <input type="checkbox" id="chalogay">
+    </div>
+  </div>
+    </div>
+
+    <script>
+    okBtn.addEventListener('click', () => {
+      overlay2.style.display = 'none';
+	  document.documentElement.requestFullscreen();
+	  const music = new Audio("SFX/emb.mp3");
+      music.loop = true;
+	  music.play();
+    });
+	
+	function club() {
+		if (xp >= 300) {
+		 window.location.href = "Breakout/mission.html";
+		};
+	}
+
+  function goToNextPage() {
+    window.location.href = 'DayCentral/index.html';
+  }
+	
+        const CELL_SIZE = 32;
+        const PLAYER_SIZE = 10;
+        let FOV = Math.PI / 4; // 60 degrees
+        const HALF_FOV = FOV / 2;
+        let NUM_RAYS = 300;
+        const MAX_DEPTH = 100;
+        const WALL_HEIGHT = 100;
+        const MINIMAP_SCALE = 0.3;
+        let SPRITE_SIZE = 40;
+        let ENEMY_SPEED = 2;
+        let ENEMY_DAMAGE = 30;
+        const ATTACK_COOLDOWN = 1000;
+		
+        document.getElementById('randomize').addEventListener('click', function() {
+            const randomChoice = Math.round(Math.random());
+            
+            if (randomChoice === 0) {
+                kazinoplus();
+            } else {
+                yobanirote();
+            }
+        });
+		
+function kazinoplus() {
+xp *= 2;
+showWin();
+const casino = new Audio("SFX/win.mp3");
+casino.play();
+}
+
+function yobanirote() {
+xp /= 2;
+const casino = new Audio("SFX/Kazik.mp3");
+casino.play();
+showLose();
+}
+
+        const MAP = [
+[0, 0, 0, 0, 0, 0, 0, 4, 3, 4, 2, 0, 4, 2, 2, 4, 4, 2, 2, 2, 2, 4, 0, 4, 0, 2, 2, 2, 4, 4],
+[0, 4, 2, 2, 4, 2, 2, 4, 1, 1, 1, 1, 1, 1, 1, 4, 4, 2, 2, 4, 4, 4, 2, 2, 0, 2, 4, 4, 4, 2],
+[0, 2, 4, 4, 2, 4, 4, 2, 1, 0, 0, 0, 0, 0, 1, 2, 4, 1, 1, 1, 1, 2, 4, 4, 2, 2, 0, 4, 0, 2],
+[0, 4, 2, 2, 4, 4, 2, 2, 0, 0, 0, 0, 0, 0, 1, 4, 2, 1, 0, 0, 1, 2, 4, 0, 2, 0, 2, 4, 2, 2],
+[0, 4, 4, 2, 4, 2, 2, 4, 1, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0, 0, 1, 5, 2, 4, 4, 4, 2, 4, 2, 4],
+[0, 2, 4, 4, 2, 4, 4, 2, 1, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 0, 1, 2, 2, 2, 2, 0, 2, 2, 4, 4],
+[0, 4, 2, 4, 4, 2, 2, 4, 2, 2, 4, 4, 2, 2, 3, 2, 2, 4, 2, 2, 4, 4, 4, 0, 2, 4, 4, 2, 2, 0],
+[0, 4, 4, 4, 2, 2, 4, 4, 4, 2, 2, 4, 4, 2, 0, 2, 4, 4, 2, 4, 2, 2, 2, 0, 2, 2, 4, 4, 2, 2],
+[0, 2, 2, 1, 0, 1, 1, 2, 4, 4, 2, 4, 2, 4, 0, 4, 0, 0, 2, 2, 4, 4, 0, 4, 2, 4, 0, 4, 2, 2],
+[0, 3, 4, 3, 0, 0, 1, 2, 2, 4, 4, 1, 1, 1, 1, 0, 2, 1, 0, 1, 1, 1, 0, 0, 4, 2, 2, 2, 0, 2],
+[0, 4, 2, 1, 1, 1, 1, 3, 2, 2, 4, 0, 0, 0, 1, 4, 0, 1, 0, 0, 0, 1, 4, 4, 0, 0, 2, 0, 4, 4],
+[0, 2, 2, 4, 2, 4, 3, 2, 4, 2, 2, 1, 0, 0, 1, 2, 2, 1, 1, 1, 1, 1, 4, 0, 0, 4, 0, 2, 0, 2],
+[0, 1, 1, 1, 1, 2, 2, 2, 2, 4, 2, 1, 1, 1, 1, 4, 2, 0, 2, 4, 2, 4, 2, 2, 0, 2, 0, 0, 4, 4],
+[0, 1, 0, 0, 1, 4, 2, 4, 4, 2, 0, 0, 0, 0, 0, 4, 2, 2, 4, 4, 2, 2, 4, 2, 4, 2, 2, 4, 2, 2],
+[0, 1, 1, 0, 1, 4, 4, 2, 2, 0, 0, 0, 0, 0, 2, 4, 4, 2, 4, 4, 2, 4, 2, 2, 4, 2, 4, 0, 2, 4],
+[0, 0, 4, 0, 4, 0, 4, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 4, 2, 4, 4, 2, 2, 4, 2, 4, 2, 2, 4, 2],
+[0, 2, 4, 2, 0, 2, 2, 4, 1, 0, 0, 0, 0, 1, 2, 4, 0, 4, 2, 2, 4, 2, 4, 0, 2, 2, 2, 4, 0, 2],
+[0, 4, 4, 2, 2, 4, 2, 4, 1, 0, 0, 0, 0, 1, 2, 2, 4, 0, 4, 2, 2, 4, 4, 4, 2, 2, 2, 4, 4, 4],
+[0, 4, 2, 2, 4, 2, 4, 2, 1, 0, 1, 1, 1, 1, 2, 4, 2, 0, 2, 4, 4, 2, 4, 2, 4, 2, 2, 0, 2, 2],
+[0, 2, 0, 4, 0, 4, 2, 4, 2, 2, 4, 4, 4, 2, 4, 2, 2, 4, 0, 2, 2, 2, 2, 4, 2, 4, 2, 0, 2, 0],
+[0, 2, 4, 0, 2, 0, 2, 0, 4, 2, 4, 2, 2, 2, 4, 4, 2, 0, 4, 2, 0, 4, 0, 2, 2, 4, 4, 2, 0, 2],
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ];
+        
+        const MAP_WIDTH = MAP[0].length;
+        const MAP_HEIGHT = MAP.length;
+
+        const player = {
+            x: CELL_SIZE * 1.5,
+            y: CELL_SIZE * 1.5,
+            angle: Math.PI / 4,
+            speed: 0,
+            health: 100,
+            lastHit: 0
+        };
+
+        const enemyImg = document.getElementById('enemy-image');
+        const spriteImg = document.getElementById('sprite-image');
+		const specialSpriteImg = document.getElementById('sprite-palm');
+
+        const sprites = [];
+        const enemies = [];
+		const specialSprites = [];
+
+        // Initialize sprites and enemies from map
+        for (let y = 0; y < MAP_HEIGHT; y++) {
+            for (let x = 0; x < MAP_WIDTH; x++) {
+                if (MAP[y][x] === 2) { // Regular sprite
+                    sprites.push({
+                        x: x * CELL_SIZE + CELL_SIZE / 2,
+                        y: y * CELL_SIZE + CELL_SIZE / 2,
+                        type: 'sprite',
+                        texture: spriteImg
+                    });
+                } else if (MAP[y][x] === 3) { // Enemy
+                    enemies.push({
+                        x: x * CELL_SIZE + CELL_SIZE / 2,
+                        y: y * CELL_SIZE + CELL_SIZE / 2,
+                        type: 'enemy',
+                        texture: enemyImg,
+                        speed: ENEMY_SPEED,
+                        lastAttack: 0
+                    });
+                } else if (MAP[y][x] === 4) { // Special sprite
+                    specialSprites.push({
+                        x: x * CELL_SIZE + CELL_SIZE / 2,
+                        y: y * CELL_SIZE + CELL_SIZE / 2,
+                        type: 'special',
+                        texture: specialSpriteImg
+                    });
+                }
+            }
+        }
+
+        const keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            ArrowLeft: false,
+            ArrowRight: false
+        };
+		
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '`') {
+        const menu = document.getElementById('cheatMenu');
+        menu.classList.toggle('active');
+      }
+    });
+	
+  const xpcheat = document.getElementById('xpcheat');
+  const godmode = document.getElementById('godmode');
+  const SnoopDog = document.getElementById('SnoopDog');
+  const Pixels = document.getElementById('Pixels');
+  const Chalogay = document.getElementById('chalogay');
+
+  xpcheat.addEventListener('change', function () {
+    if (xpcheat.checked) {
+      xp=100000000000000000000000000;
+    } else {
+      xp=0;
+    }
+  });
+  
+  godmode.addEventListener('change', function () {
+    if (godmode.checked) {
+      player.health=100000000;
+    } else {
+      player.health=100;
+    }
+  });
+  
+  SnoopDog.addEventListener('change', function () {
+    if (SnoopDog.checked) {
+      	setFOV(360);
+	    NUM_RAYS -= 250;
+    } else {
+      	setFOV(50);
+	    NUM_RAYS = 300;
+    }
+  });
+  
+  Pixels.addEventListener('change', function () {
+    if (Pixels.checked) {
+	    NUM_RAYS -= 290;
+    } else {
+      	setFOV(50);
+	    NUM_RAYS = 300;
+    }
+  });
+  
+  chalogay.addEventListener('change', function () {
+    if (chalogay.checked) {
+	    NUM_RAYS += 50000;
+		SPRITE_SIZE = 10;
+    } else {
+	    NUM_RAYS = 300;
+		SPRITE_SIZE = 40;
+    }
+  });
+
+        const canvas = document.getElementById('renderer');
+        const ctx = canvas.getContext('2d');
+        const minimap = document.getElementById('minimap');
+        const minimapCtx = minimap.getContext('2d');
+        const healthDisplay = document.getElementById('health');
+        
+        canvas.width = 800;
+        canvas.height = 600;
+        minimap.width = 200;
+        minimap.height = 200;
+
+        document.addEventListener('keydown', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = true;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = false;
+            }
+        });
+		
+        function gameLoop() {
+            update();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function update() {
+
+            if (keys.ArrowLeft) player.angle -= 0.05;
+            if (keys.ArrowRight) player.angle += 0.05;
+            
+            player.angle %= Math.PI * 2;
+            if (player.angle < 0) player.angle += Math.PI * 2;
+            
+            let moveX = 0;
+            let moveY = 0;
+            
+            if (keys.w) {
+                moveX += Math.cos(player.angle);
+                moveY += Math.sin(player.angle);
+            }
+            if (keys.s) {
+                moveX -= Math.cos(player.angle);
+                moveY -= Math.sin(player.angle);
+            }
+            if (keys.a) {
+                moveX += Math.cos(player.angle - Math.PI / 2);
+                moveY += Math.sin(player.angle - Math.PI / 2);
+            }
+            if (keys.d) {
+                moveX += Math.cos(player.angle + Math.PI / 2);
+                moveY += Math.sin(player.angle + Math.PI / 2);
+            }
+            
+            const len = Math.sqrt(moveX * moveX + moveY * moveY);
+            if (len > 0) {
+                moveX /= len;
+                moveY /= len;
+            }
+            
+            const newX = player.x + moveX * 3;
+            const newY = player.y + moveY * 3;
+            
+            if (!isWall(newX, player.y)) player.x = newX;
+            if (!isWall(player.x, newY)) player.y = newY;
+
+            updateEnemies();
+        }
+		
+    function showSdox() {
+      document.getElementById("message").classList.add("show");
+      setTimeout(() => {
+        document.getElementById("message").classList.remove("show");
+      }, 2000); // убирается через 2 секунды
+    }
+	
+    function showWin() {
+      document.getElementById("message2").classList.add("show");
+      setTimeout(() => {
+        document.getElementById("message2").classList.remove("show");
+      }, 6000); // убирается через 6 секунды
+    }
+	
+	function showLose() {
+      document.getElementById("message3").classList.add("show");
+      setTimeout(() => {
+        document.getElementById("message3").classList.remove("show");
+      }, 1000); // убирается через 1 секунд
+    }
+
+        function updateEnemies() {
+            const now = Date.now();
+            
+            for (let i = 0; i < enemies.length; i++) {
+                const enemy = enemies[i];
+                
+                const dx = player.x - enemy.x;
+                const dy = player.y - enemy.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                const dirX = dx / distance;
+                const dirY = dy / distance;
+                
+                if (distance > CELL_SIZE) {
+                    const newX = enemy.x + dirX * enemy.speed;
+                    const newY = enemy.y + dirY * enemy.speed;
+                    
+                    if (!isWall(newX, newY) && !isCollidingWithOtherEnemies(i, newX, newY)) {
+                        enemy.x = newX;
+                        enemy.y = newY;
+                    }
+                } else if (now - enemy.lastAttack > ATTACK_COOLDOWN) { 
+                    if (now - player.lastHit > 500) { 
+                        player.health -= ENEMY_DAMAGE;
+						const hits = new Audio("SFX/hit.wav");
+						hits.play();
+                        healthDisplay.textContent = `Health: ${player.health}`;
+                        player.lastHit = now;
+                        enemy.lastAttack = now;
+                        
+                        if (player.health <= 0) {
+                            showSdox();
+							document.getElementById('overlay').style.display = 'block';
+							player.speed = 0;
+							player.health = 0;
+							xp = 0;
+							const hits = new Audio("SFX/sdox.wav");
+						    hits.play();
+							setInterval(whatthefuck(), 100)
+                            healthDisplay.textContent = `Health: ${player.health}`;
+							window.addEventListener('keydown', blockKeyEvent, true);
+                        }
+                    }
+                }
+            }
+        }
+		
+  function openSecond() {
+    document.getElementById('popup1').style.display = 'none';
+  }
+		
+function blockKeyEvent(e) {
+  e.stopPropagation();
+  e.preventDefault();
+}
+
+function whatthefuck() {
+player.lastHit = now;
+}
+
+        function isCollidingWithOtherEnemies(currentIndex, x, y) {
+            for (let i = 0; i < enemies.length; i++) {
+                if (i === currentIndex) continue;
+                
+                const other = enemies[i];
+                const distance = Math.sqrt((x - other.x) ** 2 + (y - other.y) ** 2);
+                
+                if (distance < CELL_SIZE / 2) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function isWall(x, y) {
+            const cellX = Math.floor(x / CELL_SIZE);
+            const cellY = Math.floor(y / CELL_SIZE);
+            
+            if (cellX < 0 || cellX >= MAP_WIDTH || cellY < 0 || cellY >= MAP_HEIGHT) {
+                return true;
+            }
+            
+            return MAP[cellY][cellX] === 1;
+        }
+
+        function hasLineOfSight(x1, y1, x2, y2) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const steps = Math.max(Math.abs(dx), Math.abs(dy));
+            
+            const xStep = dx / steps;
+            const yStep = dy / steps;
+            
+            let x = x1;
+            let y = y1;
+            
+            for (let i = 0; i < steps; i++) {
+                x += xStep;
+                y += yStep;
+                
+                if (isWall(x, y)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function castRay(angle) {
+            angle %= Math.PI * 2;
+            if (angle < 0) angle += Math.PI * 2;
+            
+            const rayDirX = Math.cos(angle);
+            const rayDirY = Math.sin(angle);
+            
+            let mapX = Math.floor(player.x / CELL_SIZE);
+            let mapY = Math.floor(player.y / CELL_SIZE);
+            
+
+            let sideDistX, sideDistY;
+            
+
+            const deltaDistX = Math.abs(1 / rayDirX);
+            const deltaDistY = Math.abs(1 / rayDirY);
+            
+
+            let stepX, stepY;
+            
+
+            let hit = false;
+
+            let side;
+            
+
+            if (rayDirX < 0) {
+                stepX = -1;
+                sideDistX = (player.x / CELL_SIZE - mapX) * deltaDistX;
+            } else {
+                stepX = 1;
+                sideDistX = (mapX + 1.0 - player.x / CELL_SIZE) * deltaDistX;
+            }
+            
+            if (rayDirY < 0) {
+                stepY = -1;
+                sideDistY = (player.y / CELL_SIZE - mapY) * deltaDistY;
+            } else {
+                stepY = 1;
+                sideDistY = (mapY + 1.0 - player.y / CELL_SIZE) * deltaDistY;
+            }
+            
+
+            let distance = 0;
+            while (!hit && distance < MAX_DEPTH) {
+
+                if (sideDistX < sideDistY) {
+                    sideDistX += deltaDistX;
+                    mapX += stepX;
+                    side = 0;
+                } else {
+                    sideDistY += deltaDistY;
+                    mapY += stepY;
+                    side = 1;
+                }
+                
+                if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT) {
+                    hit = true;
+                    distance = MAX_DEPTH;
+                } else if (MAP[mapY][mapX] === 1) {
+                    hit = true;
+                }
+                
+                distance += 1;
+            }
+            
+            let wallDist;
+            if (side === 0) {
+                wallDist = (mapX - player.x / CELL_SIZE + (1 - stepX) / 2) / rayDirX;
+            } else {
+                wallDist = (mapY - player.y / CELL_SIZE + (1 - stepY) / 2) / rayDirY;
+            }
+            
+            wallDist = Math.abs(wallDist);
+            
+            return {
+                distance: wallDist * CELL_SIZE,
+                side: side,
+                angle: angle,
+                rayDirX: rayDirX,
+                rayDirY: rayDirY
+            };
+        }
+
+        function render() {
+
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#ffff82';
+            ctx.fillRect(0, 0, canvas.width, canvas.height / 2);
+            
+            ctx.fillStyle = '#2c472f';
+            ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2);
+            
+            const rays = [];
+            for (let i = 0; i < NUM_RAYS; i++) {
+                const rayAngle = player.angle - HALF_FOV + (i / NUM_RAYS) * FOV;
+                const ray = castRay(rayAngle);
+                rays.push(ray);
+                
+                const wallHeight = (CELL_SIZE * canvas.height) / ray.distance;
+                const wallTop = (canvas.height - wallHeight) / 2;
+                
+                const wallColor = ray.side === 0 ? 
+                    `rgb(${Math.floor(40 - ray.distance * 1)}, 40, 40)` : 
+                    `rgb(${Math.floor(50 - ray.distance * 1)}, 50, 50)`;
+                
+                ctx.fillStyle = wallColor;
+                ctx.fillRect(i * (canvas.width / NUM_RAYS), wallTop, canvas.width / NUM_RAYS + 1, wallHeight);
+            }
+            
+            renderSprites(rays);
+            
+            renderMinimap(rays);
+        }
+
+        function renderSprites(rays) {
+            const entities = [...sprites, ...enemies, ...specialSprites];
+            
+            const visibleEntities = entities.map(entity => {
+                const dx = entity.x - player.x;
+                const dy = entity.y - player.y;
+                
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                const spriteAngle = Math.atan2(dy, dx);
+                
+                let angleDiff = spriteAngle - player.angle;
+                while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+                while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+                
+                const isVisible = Math.abs(angleDiff) < FOV / 2 && 
+                                 hasLineOfSight(player.x, player.y, entity.x, entity.y);
+                
+                return {
+                    ...entity,
+                    distance,
+                    angleDiff,
+                    isVisible
+                };
+            });
+            
+            visibleEntities.sort((a, b) => b.distance - a.distance);
+            
+            for (const entity of visibleEntities) {
+                if (!entity.isVisible) continue;
+                
+                const spriteScreenX = Math.tan(entity.angleDiff) * canvas.width / FOV;
+                const spriteScreenPos = canvas.width / 2 + spriteScreenX;
+                
+                const spriteHeight = (SPRITE_SIZE * canvas.height) / entity.distance;
+                const spriteWidth = spriteHeight;
+                
+                const spriteTop = (canvas.height - spriteHeight) / 2;
+                
+                ctx.drawImage(
+                    entity.texture,
+                    spriteScreenPos - spriteWidth / 2,
+                    spriteTop,
+                    spriteWidth,
+                    spriteHeight
+                );
+            }
+        }
+
+
+        function renderMinimap(rays) {
+
+            minimapCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            minimapCtx.fillRect(0, 0, minimap.width, minimap.height);
+            
+
+            const centerX = minimap.width / 2;
+            const centerY = minimap.height / 2;
+            
+
+            const cellSize = CELL_SIZE * MINIMAP_SCALE;
+            const mapOffsetX = centerX - (player.x * MINIMAP_SCALE);
+            const mapOffsetY = centerY - (player.y * MINIMAP_SCALE);
+            
+            for (let y = 0; y < MAP_HEIGHT; y++) {
+                for (let x = 0; x < MAP_WIDTH; x++) {
+                    if (MAP[y][x] === 1) {
+                        minimapCtx.fillStyle = '#fff';
+                        minimapCtx.fillRect(
+                            x * cellSize + mapOffsetX,
+                            y * cellSize + mapOffsetY,
+                            cellSize,
+                            cellSize
+                        );
+                    } else {
+                        minimapCtx.fillStyle = '#555';
+                        minimapCtx.fillRect(
+                            x * cellSize + mapOffsetX,
+                            y * cellSize + mapOffsetY,
+                            cellSize,
+                            cellSize
+                        );
+                    }
+                    
+                    minimapCtx.strokeStyle = '#333';
+                    minimapCtx.strokeRect(
+                        x * cellSize + mapOffsetX,
+                        y * cellSize + mapOffsetY,
+                        cellSize,
+                        cellSize
+                    );
+                }
+            }
+            
+            for (const sprite of sprites) {
+                minimapCtx.fillStyle = '#0f0';
+                minimapCtx.beginPath();
+                minimapCtx.arc(
+                    sprite.x * MINIMAP_SCALE + mapOffsetX,
+                    sprite.y * MINIMAP_SCALE + mapOffsetY,
+                    3,
+                    0,
+                    Math.PI * 2
+                );
+                minimapCtx.fill();
+            }
+            
+            for (const enemy of enemies) {
+                minimapCtx.fillStyle = '#f00';
+                minimapCtx.beginPath();
+                minimapCtx.arc(
+                    enemy.x * MINIMAP_SCALE + mapOffsetX,
+                    enemy.y * MINIMAP_SCALE + mapOffsetY,
+                    3,
+                    0,
+                    Math.PI * 2
+                );
+                minimapCtx.fill();
+            }
+            
+            minimapCtx.fillStyle = '#ff0';
+            minimapCtx.beginPath();
+            minimapCtx.arc(centerX, centerY, PLAYER_SIZE * MINIMAP_SCALE / 2, 0, Math.PI * 2);
+            minimapCtx.fill();
+            
+            // Draw player direction
+            minimapCtx.strokeStyle = '#ff0';
+            minimapCtx.lineWidth = 2;
+            minimapCtx.beginPath();
+            minimapCtx.moveTo(centerX, centerY);
+            minimapCtx.lineTo(
+                centerX + Math.cos(player.angle) * 20,
+                centerY + Math.sin(player.angle) * 20
+            );
+            minimapCtx.stroke();
+            
+            minimapCtx.strokeStyle = 'rgba(255, 255, 0, 0.3)';
+            minimapCtx.lineWidth = 1;
+            for (const ray of rays) {
+                minimapCtx.beginPath();
+                minimapCtx.moveTo(centerX, centerY);
+                minimapCtx.lineTo(
+                    centerX + ray.rayDirX * ray.distance * MINIMAP_SCALE,
+                    centerY + ray.rayDirY * ray.distance * MINIMAP_SCALE
+                );
+                minimapCtx.stroke();
+            }
+        }
+
+		var xp = 70000;
+		
+		function xpadd() {
+		    document.getElementById("controls").innerText = "XP: " + xp;
+            xp++;
+		}
+		
+		setInterval(xpadd, 200);
+		
+function medkit() {
+    if (xp > 30) {
+	xp-=30;
+    player.health+=30;
+   } 
+}
+
+function setFOV(degrees) {
+	FOV = degrees * Math.PI / 180;
+}
+
+function marijuana() {
+    if (xp > 35) {
+	xp-=35;
+    player.health-=30;
+	player.speed+=5;
+	setFOV(360);
+	NUM_RAYS -= 250;
+   } 
+}
+
+function Heroin() {
+    if (xp > 100) {
+	xp-=100;
+	setFOV(360);
+	NUM_RAYS -= 295;
+	SPRITE_SIZE -= 30;
+   } 
+}
+
+function passedtheme() {
+const muzika = new Audio("passed.mp3");
+muzika.play();
+}
+
+function nextmission() {
+	window.location.href = "BossVertolet/index.html";
+}
+
+function radionew() {
+  var audio = new Audio('Radio/news.wav');	
+  audio.play();
+  document.getElementById("rnew").disabled = true;
+}
+
+function radioneww() {
+  var audio = new Audio('Radio/classic.wav');	
+  audio.play();
+  audio.volume = 0.4;
+  document.getElementById("rneww").disabled = true;
+}
+
+        gameLoop();
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Central Massacre</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(0deg,rgba(0, 0, 0, 0.5) 0%, rgba(41, 41, 41, 1) 50%, rgba(74, 74, 74, 1) 100%);
+			      background-image: url('back.jpg');
+      background-size: cover; 
+      background-position: center; 
+      background-repeat: no-repeat; 
+      height: 100vh; 
+      font-family: Arial, sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+            overflow: hidden;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+background: linear-gradient(90deg,rgba(63, 251, 76, 0.1) 0%, rgba(47, 255, 0, 0.3) 26%, rgba(80, 186, 45, 1) 100%);
+            z-index: 1;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+          
+        }
+
+        .menu {
+            position: absolute;
+            left: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 3;
+            width: 300px;
+            padding: 20px;
+            background: rgba(10, 10, 15, 0.7);
+        }
+
+        .menu-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #fff;
+            letter-spacing: 2px;
+			line-height: 0.8;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-btn {
+            padding: 12px 20px;
+background: linear-gradient(0deg,rgba(0, 0, 0, 0.5) 0%, rgba(41, 41, 41, 1) 50%, rgba(74, 74, 74, 1) 100%);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-btn:hover {
+            transform: translateX(10px);
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .menu-btn:hover::before {
+            left: 100%;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+		
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #modal {
+      background: black;
+      padding: 20px 30px;
+      text-align: center;
+      box-shadow: 0 0 10px black;
+	  color:red;
+	  width:400px;
+    }
+
+    #okBtn {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: red;
+      color: black;
+      border: none;
+      cursor: pointer;
+    }
+
+    #okBtn:hover {
+      background: white;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="background"></div>
+        <div id="particles-js"></div>
+        
+        <div class="menu">
+            <h1 class="menu-title">Green Central Massacre</h1>
+            <div class="menu-items">
+                <button onclick="location.href='Game/index.html';" class="menu-btn">Singleplayer</button>
+                <button onclick="location.href='https://zrozumilostudio.github.io/';" class="menu-btn">Website</button>
+                <button class="menu-btn">Exit</button>
+            </div>
+        </div>
+		
+  <div id="overlay">
+    <div id="modal">
+      <p>Disclaimer: The game contains extreme levels of cringe, boobs, drugs and Polish swearing!</p>
+      <button id="okBtn">OK</button>
+    </div>
+  </div>
+  
+  </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+    const overlay = document.getElementById('overlay');
+    const okBtn = document.getElementById('okBtn');
+
+    okBtn.addEventListener('click', () => {
+      overlay.style.display = 'none';
+	  const music = new Audio("wgnrride.wav");
+      music.loop = true;
+	  music.play();
+	  document.documentElement.requestFullscreen();
+    });
+	
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 400,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#a4ff7d",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 10,
+                    "direction": "top",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 20,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>
