@@ -152,6 +152,9 @@
 	<button class="button2" onclick="vammo()">Incendiary cartridges(150 XP)</button>
 	<button class="button2" onclick="silencer()">Gun Silencer(200 XP)</button>
 	<button class="button2" onclick="fork()">Melee weapon "Fork"(30 XP)</button>
+	<button class="button2" onclick="cigarette()">Cigarette(30 XP)</button>
+	<br>
+	<button class="button2" onclick="xammo()">Combat Shotgun(150 XP)</button>
 	<br>
 	<button class="button5" onclick="dump()">Go to dump(100 XP)</button>
 	<button class="button5" onclick="freezerhere()">Go to ???(100 XP)</button>
@@ -218,6 +221,12 @@ const scaleStep = 0.1; // Крок зміни масштабу
 		};
 	}
 	
+	function xammo() {
+		if (xp > 150) {
+		 window.location.href = 'Engine/Xammo/index.html';
+		};
+	}
+	
 	function silencer() {
 		if (xp > 200) {
 		 window.location.href = 'Engine/tiho/vedropc.html';
@@ -227,6 +236,12 @@ const scaleStep = 0.1; // Крок зміни масштабу
 	function fork() {
 		if (xp > 30) {
 		 window.location.href = 'Engine/vilka/vedropc.html';
+		};
+	}
+	
+	function cigarette() {
+		if (xp > 30) {
+		 window.location.href = 'Engine/sigara/vedropc.html';
 		};
 	}
 	
